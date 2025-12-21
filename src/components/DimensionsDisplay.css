@@ -1,0 +1,556 @@
+/**
+ * DimensionsDisplay 组件样式
+ * 需求: 13.4 - 显示所有维度的当前能力值和进度条
+ * 支持进度条和雷达图两种显示模式
+ */
+
+.dimensions-display {
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4f8 100%);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dimensions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.dimensions-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title-icon {
+  font-size: 1.1rem;
+  animation: titlePulse 2s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* 视图切换按钮 */
+.view-mode-toggle {
+  display: flex;
+  gap: 0.25rem;
+  background: #e5e7eb;
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.view-mode-btn {
+  background: transparent;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.view-mode-btn:hover {
+  color: #333;
+}
+
+.view-mode-btn.active {
+  background: white;
+  color: #3b82f6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dimensions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* 单个维度进度条 */
+.dimension-bar {
+  background: white;
+  border-radius: 10px;
+  padding: 0.625rem;
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+  position: relative;
+  overflow: hidden;
+}
+
+.dimension-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--dimension-color, #ccc);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dimension-bar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.dimension-bar:hover::before {
+  opacity: 1;
+}
+
+.dimension-header {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 维度图标包装器 */
+.dimension-icon-wrapper {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--dimension-color, #ccc) 15%, white),
+    color-mix(in srgb, var(--dimension-color, #ccc) 25%, white)
+  );
+  box-shadow: 0 2px 4px color-mix(in srgb, var(--dimension-color, #ccc) 20%, transparent);
+  transition: all 0.3s ease;
+}
+
+.dimension-bar:hover .dimension-icon-wrapper {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 4px 8px color-mix(in srgb, var(--dimension-color, #ccc) 30%, transparent);
+}
+
+.dimension-icon {
+  font-size: 1rem;
+}
+
+.dimension-name {
+  flex: 1;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.dimension-values {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.dimension-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.dimension-bonus {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #22c55e;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  padding: 0.125rem 0.375rem;
+  border-radius: 6px;
+  animation: bonusGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes bonusGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(34, 197, 94, 0); }
+  50% { box-shadow: 0 0 8px rgba(34, 197, 94, 0.3); }
+}
+
+/* 进度条轨道 */
+.dimension-track {
+  height: 10px;
+  background: linear-gradient(90deg, #e5e7eb, #f3f4f6);
+  border-radius: 5px;
+  overflow: visible;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.dimension-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.dimension-bonus-fill {
+  height: 100%;
+  border-radius: 0 5px 5px 0;
+  position: absolute;
+  top: 0;
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.4), rgba(34, 197, 94, 0.6));
+  animation: bonusPulse 2s infinite;
+}
+
+@keyframes bonusPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+/* 阈值标记 */
+.dimension-threshold {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  border-radius: 1px;
+}
+
+.dimension-threshold::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 6px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+}
+
+.dimension-threshold.threshold-40 {
+  left: 40%;
+}
+
+.dimension-threshold.threshold-60 {
+  left: 60%;
+}
+
+/* 维度等级 */
+.dimension-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.375rem;
+}
+
+.dimension-level {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dimension-level.excellent {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  color: #166534;
+}
+
+.dimension-level.good {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1e40af;
+}
+
+.dimension-level.average {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+}
+
+.dimension-level.weak {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: #991b1b;
+}
+
+/* 各维度颜色 */
+/* 算法优化 - 蓝色 */
+.dimension-bar.algorithm {
+  --dimension-color: #3b82f6;
+}
+
+.dimension-bar.algorithm .dimension-fill {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+}
+
+.dimension-bar.algorithm:hover {
+  border-color: #3b82f6;
+}
+
+/* 数据处理 - 紫色 */
+.dimension-bar.data-processing {
+  --dimension-color: #8b5cf6;
+}
+
+.dimension-bar.data-processing .dimension-fill {
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa, #c4b5fd);
+}
+
+.dimension-bar.data-processing:hover {
+  border-color: #8b5cf6;
+}
+
+/* 系统稳定 - 绿色 */
+.dimension-bar.stability {
+  --dimension-color: #10b981;
+}
+
+.dimension-bar.stability .dimension-fill {
+  background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);
+}
+
+.dimension-bar.stability:hover {
+  border-color: #10b981;
+}
+
+/* 用户体验 - 橙色 */
+.dimension-bar.user-experience {
+  --dimension-color: #f59e0b;
+}
+
+.dimension-bar.user-experience .dimension-fill {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24, #fcd34d);
+}
+
+.dimension-bar.user-experience:hover {
+  border-color: #f59e0b;
+}
+
+/* 图例 */
+.dimensions-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 0.875rem;
+  padding-top: 0.625rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.65rem;
+  color: #666;
+}
+
+.legend-marker {
+  width: 14px;
+  height: 5px;
+  border-radius: 3px;
+}
+
+.legend-marker.threshold-marker {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.legend-marker.bonus-marker {
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.4), rgba(34, 197, 94, 0.6));
+}
+
+/* ==================== 雷达图样式 ==================== */
+
+.radar-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.radar-chart {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+}
+
+/* 网格线 */
+.radar-grid {
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 1;
+}
+
+.radar-grid.threshold-grid {
+  stroke: rgba(0, 0, 0, 0.15);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 2;
+}
+
+/* 轴线 */
+.radar-axis {
+  stroke: #d1d5db;
+  stroke-width: 1;
+}
+
+/* 数据多边形 */
+.radar-polygon {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.radar-polygon.base-polygon {
+  fill: rgba(156, 163, 175, 0.2);
+  stroke: rgba(156, 163, 175, 0.5);
+  stroke-width: 1;
+}
+
+.radar-polygon.effective-polygon {
+  fill: rgba(59, 130, 246, 0.25);
+  stroke: #3b82f6;
+  stroke-width: 2;
+  filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
+}
+
+/* 数据点 */
+.radar-point {
+  stroke: white;
+  stroke-width: 2;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.radar-chart:hover .radar-point {
+  r: 6;
+}
+
+/* 维度标签 */
+.radar-label {
+  font-size: 16px;
+  fill: #666;
+}
+
+/* 雷达图数值列表 */
+.radar-values {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.radar-value-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.radar-value-item:hover {
+  border-color: var(--dimension-color, #ccc);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--dimension-color, #ccc) 20%, transparent);
+}
+
+.radar-value-icon {
+  font-size: 0.9rem;
+}
+
+.radar-value-name {
+  flex: 1;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.radar-value-number {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.radar-value-bonus {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #22c55e;
+  background: #f0fdf4;
+  padding: 0.1rem 0.25rem;
+  border-radius: 4px;
+}
+
+.radar-value-level {
+  font-size: 0.55rem;
+  font-weight: 600;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+.radar-value-level.excellent {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.radar-value-level.good {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.radar-value-level.average {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.radar-value-level.weak {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .dimensions-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dimension-bar {
+    padding: 0.75rem;
+  }
+  
+  .radar-values {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .dimensions-display {
+    padding: 0.75rem;
+  }
+  
+  .dimensions-title {
+    font-size: 0.85rem;
+  }
+  
+  .dimension-name {
+    font-size: 0.7rem;
+  }
+  
+  .dimension-value {
+    font-size: 0.85rem;
+  }
+  
+  .dimension-icon-wrapper {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .dimension-icon {
+    font-size: 0.85rem;
+  }
+  
+  .radar-chart {
+    max-width: 180px;
+  }
+}

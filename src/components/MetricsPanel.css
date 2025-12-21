@@ -1,0 +1,515 @@
+/**
+ * MetricsPanel 组件样式
+ * 需求: 8.2, 8.3
+ */
+
+.metrics-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  animation: slideInLeft 0.4s ease-out 0.1s both;
+}
+
+.metrics-panel .panel-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+/* 仪表盘容器 */
+.gauges-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* 多维度指标区域 */
+.model-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+/* 小型进度条 */
+.mini-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mini-bar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.mini-bar-icon {
+  font-size: 0.9rem;
+}
+
+.mini-bar-label {
+  flex: 1;
+  color: #666;
+}
+
+.mini-bar-value {
+  font-weight: 600;
+  color: #333;
+}
+
+.mini-bar-track {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mini-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* 准确率 - 蓝色 */
+.mini-bar.accuracy .mini-bar-fill {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+/* 速度 - 黄色 */
+.mini-bar.speed .mini-bar-fill {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+/* 创造力 - 紫色 */
+.mini-bar.creativity .mini-bar-fill {
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+}
+
+/* 鲁棒性 - 绿色 */
+.mini-bar.robustness .mini-bar-fill {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+/* 圆形仪表盘 */
+.circular-gauge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 120px;
+  transition: transform 0.3s ease;
+}
+
+.circular-gauge:hover {
+  transform: scale(1.05);
+}
+
+.gauge-svg {
+  width: 100px;
+  height: 100px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.gauge-background {
+  opacity: 0.2;
+}
+
+.gauge-progress {
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gauge-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -70%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gauge-icon {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+  transition: transform 0.3s ease;
+}
+
+.circular-gauge:hover .gauge-icon {
+  transform: scale(1.2);
+}
+
+.gauge-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+/* 数值变化动画 */
+.gauge-value.value-changed {
+  animation: valuePopIn 0.4s ease-out;
+}
+
+@keyframes valuePopIn {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.gauge-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.gauge-sublabel {
+  font-size: 0.7rem;
+  color: #999;
+  margin-top: 0.125rem;
+}
+
+/* 拟合指数样式 - 蓝色 */
+.circular-gauge.fit-score {
+  color: #4a90d9;
+}
+
+.circular-gauge.fit-score .gauge-progress {
+  stroke: #4a90d9;
+}
+
+.circular-gauge.fit-score .gauge-value {
+  color: #2563eb;
+}
+
+/* 熵值样式 - 根据等级变色 */
+/* 安全区 - 绿色 */
+.circular-gauge.entropy-safe {
+  color: #22c55e;
+}
+
+.circular-gauge.entropy-safe .gauge-progress {
+  stroke: #22c55e;
+}
+
+.circular-gauge.entropy-safe .gauge-value {
+  color: #16a34a;
+}
+
+/* 危险区 - 黄色/橙色 */
+.circular-gauge.entropy-warning {
+  color: #f59e0b;
+}
+
+.circular-gauge.entropy-warning .gauge-progress {
+  stroke: #f59e0b;
+  animation: warningGlow 2s infinite;
+}
+
+@keyframes warningGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8));
+  }
+}
+
+.circular-gauge.entropy-warning .gauge-value {
+  color: #d97706;
+}
+
+/* 崩溃区 - 红色 */
+.circular-gauge.entropy-danger {
+  color: #ef4444;
+}
+
+.circular-gauge.entropy-danger .gauge-progress {
+  stroke: #ef4444;
+  animation: dangerGlow 1s infinite;
+}
+
+@keyframes dangerGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(239, 68, 68, 1));
+  }
+}
+
+.circular-gauge.entropy-danger .gauge-value {
+  color: #dc2626;
+  animation: dangerPulse 1s infinite;
+}
+
+@keyframes dangerPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.circular-gauge.entropy-danger .gauge-icon {
+  animation: fireFlicker 0.5s infinite;
+}
+
+@keyframes fireFlicker {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+/* 熵值状态提示 */
+.entropy-status {
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.entropy-status-safe {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.entropy-status-warning {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  animation: warningShake 3s infinite;
+}
+
+@keyframes warningShake {
+  0%, 90%, 100% {
+    transform: translateX(0);
+  }
+  92%, 96% {
+    transform: translateX(-2px);
+  }
+  94%, 98% {
+    transform: translateX(2px);
+  }
+}
+
+.entropy-status-danger {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  animation: dangerAlert 2s infinite;
+}
+
+@keyframes dangerAlert {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+    transform: scale(1.01);
+  }
+}
+
+/* 回合信息 */
+.turn-info {
+  display: flex;
+  gap: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.turn-current,
+.turn-exam {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.turn-current:hover,
+.turn-exam:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.turn-icon,
+.exam-icon {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.turn-current:hover .turn-icon,
+.turn-exam:hover .exam-icon {
+  transform: scale(1.15);
+}
+
+.turn-details,
+.exam-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.turn-label,
+.exam-label {
+  font-size: 0.7rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.turn-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+/* 回合数变化动画 */
+.turn-value.turn-changed {
+  animation: turnIncrement 0.5s ease-out;
+}
+
+@keyframes turnIncrement {
+  0% {
+    transform: scale(1);
+    color: #333;
+  }
+  50% {
+    transform: scale(1.3);
+    color: #4a90d9;
+  }
+  100% {
+    transform: scale(1);
+    color: #333;
+  }
+}
+
+.exam-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4a90d9;
+}
+
+.exam-warning {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  animation: examWarningBlink 1s infinite;
+}
+
+@keyframes examWarningBlink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .metrics-panel {
+    padding: 1rem;
+  }
+  
+  .circular-gauge {
+    width: 100px;
+  }
+  
+  .gauge-svg {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .metrics-panel {
+    padding: 1rem;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .gauges-container {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .circular-gauge {
+    width: 100%;
+    max-width: 120px;
+  }
+
+  .turn-info {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .turn-current,
+  .turn-exam {
+    padding: 0.625rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gauges-container {
+    gap: 1rem;
+  }
+  
+  .circular-gauge {
+    max-width: 100px;
+  }
+  
+  .gauge-svg {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .gauge-value {
+    font-size: 0.95rem;
+  }
+  
+  .gauge-label {
+    font-size: 0.7rem;
+  }
+  
+  .entropy-status {
+    font-size: 0.8rem;
+    padding: 0.625rem;
+  }
+}

@@ -1,0 +1,791 @@
+/**
+ * GameInitializer 组件样式
+ * 需求: 10.1, 10.5, 10.6, 21.1, 21.3
+ */
+
+.game-initializer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  animation: initializerFadeIn 0.6s ease-out;
+}
+
+@keyframes initializerFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.initializer-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: headerSlideDown 0.5s ease-out;
+}
+
+@keyframes headerSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.initializer-header h1 {
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 20px rgba(102, 126, 234, 0.5);
+}
+
+.initializer-header .subtitle {
+  font-size: 1.1rem;
+  color: #a0a0a0;
+}
+
+/* 存档区域 */
+.saved-game-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  animation: sectionFadeIn 0.5s ease-out 0.2s both;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+}
+
+@keyframes sectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.load-game-button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.load-game-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.load-game-button:hover::before {
+  left: 100%;
+}
+
+.load-game-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.load-game-button:active {
+  transform: translateY(-1px);
+}
+
+.or-divider {
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+/* ============ 难度选择样式 ============ */
+
+.difficulty-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.difficulty-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.difficulty-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.difficulty-card.selected {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* 简单难度 - 绿色 */
+.difficulty-easy {
+  border-color: #2ecc71;
+}
+
+.difficulty-easy.selected {
+  background: linear-gradient(135deg, #f0fff5 0%, #fff 100%);
+  border-color: #27ae60;
+}
+
+.difficulty-easy .difficulty-name {
+  color: #27ae60;
+}
+
+/* 普通难度 - 蓝色 */
+.difficulty-normal {
+  border-color: #3498db;
+}
+
+.difficulty-normal.selected {
+  background: linear-gradient(135deg, #f0f7ff 0%, #fff 100%);
+  border-color: #2980b9;
+}
+
+.difficulty-normal .difficulty-name {
+  color: #2980b9;
+}
+
+/* 困难难度 - 橙色 */
+.difficulty-hard {
+  border-color: #e67e22;
+}
+
+.difficulty-hard.selected {
+  background: linear-gradient(135deg, #fff8f0 0%, #fff 100%);
+  border-color: #d35400;
+}
+
+.difficulty-hard .difficulty-name {
+  color: #d35400;
+}
+
+/* 噩梦难度 - 红色 */
+.difficulty-nightmare {
+  border-color: #e74c3c;
+}
+
+.difficulty-nightmare.selected {
+  background: linear-gradient(135deg, #fff0f0 0%, #fff 100%);
+  border-color: #c0392b;
+}
+
+.difficulty-nightmare .difficulty-name {
+  color: #c0392b;
+}
+
+.difficulty-name {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.difficulty-description {
+  color: #666;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.difficulty-modifiers {
+  margin-bottom: 0.5rem;
+}
+
+.difficulty-modifiers h4 {
+  font-size: 0.85rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.25rem;
+}
+
+.difficulty-modifiers ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.difficulty-modifiers li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  font-size: 0.85rem;
+}
+
+.modifier-label {
+  color: #666;
+}
+
+.modifier-value {
+  font-weight: bold;
+}
+
+.modifier-value.positive {
+  color: #27ae60;
+}
+
+.modifier-value.negative {
+  color: #e74c3c;
+}
+
+.selected-indicator {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: #27ae60;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* 步骤导航 */
+.step-navigation {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.continue-button {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.continue-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+}
+
+.continue-button:active {
+  transform: translateY(-1px);
+}
+
+/* 已选难度横幅 */
+.selected-difficulty-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.difficulty-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.difficulty-badge.difficulty-easy {
+  background: #27ae60;
+  color: white;
+}
+
+.difficulty-badge.difficulty-normal {
+  background: #2980b9;
+  color: white;
+}
+
+.difficulty-badge.difficulty-hard {
+  background: #d35400;
+  color: white;
+}
+
+.difficulty-badge.difficulty-nightmare {
+  background: #c0392b;
+  color: white;
+}
+
+.change-difficulty-btn {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  color: #a0a0a0;
+  background: transparent;
+  border: 1px solid #a0a0a0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.change-difficulty-btn:hover {
+  color: #fff;
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 形态卡片网格 */
+.archetype-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* 形态卡片 */
+.archetype-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.archetype-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: currentColor;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.archetype-card:hover::before {
+  transform: scaleX(1);
+}
+
+.archetype-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* 卡片入场动画 */
+.archetype-card:nth-child(1) {
+  animation: cardSlideUp 0.5s ease-out 0.3s both;
+}
+
+.archetype-card:nth-child(2) {
+  animation: cardSlideUp 0.5s ease-out 0.4s both;
+}
+
+.archetype-card:nth-child(3) {
+  animation: cardSlideUp 0.5s ease-out 0.5s both;
+}
+
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 创业公司 - 橙色主题 */
+.archetype-startup {
+  border-color: #ff6b35;
+  color: #ff6b35;
+}
+
+.archetype-startup:hover {
+  border-color: #ff6b35;
+  background: linear-gradient(135deg, #fff5f0 0%, #fff 100%);
+  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.25);
+}
+
+.archetype-startup .archetype-name {
+  color: #ff6b35;
+}
+
+.archetype-startup .select-button {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+}
+
+.archetype-startup .archetype-icon {
+  animation: rocketBounce 2s ease-in-out infinite;
+}
+
+@keyframes rocketBounce {
+  0%, 100% {
+    transform: translateY(0) rotate(-10deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(10deg);
+  }
+}
+
+/* 大厂团队 - 蓝色主题 */
+.archetype-bigtech {
+  border-color: #4a90d9;
+  color: #4a90d9;
+}
+
+.archetype-bigtech:hover {
+  border-color: #4a90d9;
+  background: linear-gradient(135deg, #f0f7ff 0%, #fff 100%);
+  box-shadow: 0 12px 40px rgba(74, 144, 217, 0.25);
+}
+
+.archetype-bigtech .archetype-name {
+  color: #4a90d9;
+}
+
+.archetype-bigtech .select-button {
+  background: linear-gradient(135deg, #4a90d9 0%, #357abd 100%);
+}
+
+.archetype-bigtech .archetype-icon {
+  animation: buildingPulse 3s ease-in-out infinite;
+}
+
+@keyframes buildingPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* 学术研究 - 绿色主题 */
+.archetype-academic {
+  border-color: #2ecc71;
+  color: #2ecc71;
+}
+
+.archetype-academic:hover {
+  border-color: #2ecc71;
+  background: linear-gradient(135deg, #f0fff5 0%, #fff 100%);
+  box-shadow: 0 12px 40px rgba(46, 204, 113, 0.25);
+}
+
+.archetype-academic .archetype-name {
+  color: #2ecc71;
+}
+
+.archetype-academic .select-button {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.archetype-academic .archetype-icon {
+  animation: bookFloat 2.5s ease-in-out infinite;
+}
+
+@keyframes bookFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* 卡片内容样式 */
+.archetype-icon {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.archetype-name {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.archetype-description {
+  color: #666;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.archetype-resources,
+.archetype-ability {
+  margin-bottom: 1rem;
+}
+
+.archetype-resources h4,
+.archetype-ability h4 {
+  font-size: 0.9rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.25rem;
+}
+
+.archetype-resources ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.archetype-resources li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.archetype-resources li:hover {
+  background: rgba(0, 0, 0, 0.02);
+  padding-left: 0.5rem;
+}
+
+.resource-label {
+  color: #666;
+}
+
+.resource-value {
+  font-weight: bold;
+  color: #333;
+}
+
+.archetype-ability p {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+  text-align: center;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.archetype-card:hover .archetype-ability p {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* 选择按钮 */
+.select-button {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.select-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.select-button:hover::before {
+  left: 100%;
+}
+
+.select-button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.select-button:active {
+  transform: scale(0.98);
+}
+
+/* 游戏简介 */
+.game-intro {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  animation: introFadeIn 0.5s ease-out 0.6s both;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes introFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.game-intro h2 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.game-intro p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.game-intro p:last-child {
+  margin-bottom: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .game-initializer {
+    padding: 1.5rem;
+  }
+  
+  .initializer-header h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-initializer {
+    padding: 1rem;
+  }
+
+  .initializer-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .initializer-header .subtitle {
+    font-size: 1rem;
+  }
+
+  .archetype-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .archetype-card {
+    padding: 1.25rem;
+  }
+  
+  .archetype-icon {
+    font-size: 2.5rem;
+  }
+  
+  .archetype-name {
+    font-size: 1.25rem;
+  }
+  
+  .saved-game-section {
+    padding: 1rem;
+  }
+  
+  .load-game-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-initializer {
+    padding: 0.75rem;
+  }
+  
+  .initializer-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .initializer-header .subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .archetype-card {
+    padding: 1rem;
+  }
+  
+  .archetype-icon {
+    font-size: 2rem;
+  }
+  
+  .archetype-name {
+    font-size: 1.1rem;
+  }
+  
+  .archetype-description {
+    font-size: 0.85rem;
+  }
+  
+  .select-button {
+    padding: 0.625rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .game-intro {
+    padding: 1rem;
+  }
+  
+  .game-intro h2 {
+    font-size: 1rem;
+  }
+  
+  .game-intro p {
+    font-size: 0.85rem;
+  }
+}

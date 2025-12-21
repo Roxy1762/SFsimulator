@@ -1,0 +1,397 @@
+/**
+ * OperationsModal 组件样式
+ * 弹窗式操作选择界面
+ */
+
+.operations-modal-container {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.operations-modal-container .panel-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.operations-modal-container .title-icon {
+  font-size: 1.1rem;
+}
+
+/* 类别按钮网格 */
+.category-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.625rem;
+}
+
+/* 类别按钮 */
+.category-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 0.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  min-height: 80px;
+}
+
+.category-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.category-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.category-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.category-btn-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.375rem;
+  transition: transform 0.3s ease;
+}
+
+.category-button:hover:not(:disabled) .category-btn-icon {
+  transform: scale(1.15);
+}
+
+.category-btn-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.25rem;
+}
+
+.category-btn-count {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.category-btn-count .exec-count {
+  color: #94a3b8;
+}
+
+.category-btn-count .exec-count.active {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+/* 类别特定样式 */
+.category-button.data {
+  border-color: #cbd5e1;
+}
+.category-button.data:hover:not(:disabled) {
+  border-color: #94a3b8;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+.category-button.data .category-btn-name { color: #475569; }
+
+.category-button.training {
+  border-color: #93c5fd;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+.category-button.training:hover:not(:disabled) {
+  border-color: #60a5fa;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+.category-button.training .category-btn-name { color: #1d4ed8; }
+
+.category-button.maintenance {
+  border-color: #86efac;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+.category-button.maintenance:hover:not(:disabled) {
+  border-color: #4ade80;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+}
+.category-button.maintenance .category-btn-name { color: #15803d; }
+
+.category-button.dimension {
+  border-color: #c4b5fd;
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+}
+.category-button.dimension:hover:not(:disabled) {
+  border-color: #a78bfa;
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+}
+.category-button.dimension .category-btn-name { color: #6d28d9; }
+
+.category-button.premium {
+  border-color: #fcd34d;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+.category-button.premium:hover:not(:disabled) {
+  border-color: #fbbf24;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+.category-button.premium .category-btn-name { color: #b45309; }
+
+.category-button.team {
+  border-color: #67e8f9;
+  background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+}
+.category-button.team:hover:not(:disabled) {
+  border-color: #22d3ee;
+  background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
+}
+.category-button.team .category-btn-name { color: #0e7490; }
+
+.category-button.sideJob {
+  border-color: #fdba74;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+}
+.category-button.sideJob:hover:not(:disabled) {
+  border-color: #fb923c;
+  background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+}
+.category-button.sideJob .category-btn-name { color: #c2410c; }
+
+/* 有可执行操作时的高亮 */
+.category-button.has-executable {
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.3);
+}
+
+/* 弹窗遮罩 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+  backdrop-filter: blur(2px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 弹窗内容 */
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 弹窗头部 */
+.modal-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+  position: relative;
+}
+
+.modal-icon {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.modal-description {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-left: 0.75rem;
+}
+
+.modal-close-btn {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f1f5f9;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+/* 弹窗主体 */
+.modal-body {
+  padding: 1rem;
+  max-height: calc(80vh - 80px);
+  overflow-y: auto;
+}
+
+.modal-operations {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.modal-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #94a3b8;
+}
+
+.modal-empty .empty-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.6;
+}
+
+.modal-empty .empty-text {
+  font-size: 0.9rem;
+}
+
+/* 弹窗类别特定样式 */
+.modal-content.data .modal-header {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+.modal-content.training .modal-header {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+.modal-content.maintenance .modal-header {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+.modal-content.dimension .modal-header {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+}
+.modal-content.premium .modal-header {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+.modal-content.team .modal-header {
+  background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+}
+.modal-content.sideJob .modal-header {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+}
+
+/* 服务熔断状态 */
+.operations-modal-container.meltdown {
+  position: relative;
+  pointer-events: none;
+}
+
+.operations-modal-container.meltdown::after {
+  content: '🔥 服务熔断中';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .category-buttons-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .category-button {
+    padding: 0.75rem 0.375rem;
+    min-height: 70px;
+  }
+  
+  .category-btn-icon {
+    font-size: 1.25rem;
+  }
+  
+  .category-btn-name {
+    font-size: 0.75rem;
+  }
+  
+  .modal-content {
+    width: 95%;
+    max-height: 85vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .operations-modal-container {
+    padding: 0.75rem;
+  }
+  
+  .category-buttons-grid {
+    gap: 0.375rem;
+  }
+  
+  .category-button {
+    padding: 0.625rem 0.25rem;
+    min-height: 60px;
+  }
+  
+  .category-btn-icon {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .category-btn-name {
+    font-size: 0.7rem;
+  }
+  
+  .category-btn-count {
+    font-size: 0.65rem;
+  }
+}

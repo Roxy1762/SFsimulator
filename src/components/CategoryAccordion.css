@@ -1,0 +1,437 @@
+/**
+ * CategoryAccordion 组件样式
+ * 需求: 12.2, 12.3, 12.4, 12.5
+ * 
+ * 动画效果:
+ * - 展开/折叠过渡效果 (cubic-bezier 缓动)
+ * - 图标旋转动画
+ * - 悬停状态动画
+ */
+
+.category-accordion {
+  margin-bottom: 0.75rem;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-accordion:last-child {
+  margin-bottom: 0;
+}
+
+/* 手风琴头部按钮 */
+.accordion-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.accordion-header:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-header:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.accordion-header:active {
+  transform: translateY(0);
+}
+
+/* 类别图标 */
+.accordion-icon {
+  font-size: 1.25rem;
+  margin-right: 0.625rem;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-block;
+}
+
+.accordion-header:hover .accordion-icon {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.category-accordion.expanded .accordion-icon {
+  animation: iconPulse 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes iconPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* 类别名称 */
+.accordion-name {
+  font-weight: 600;
+  color: #1e293b;
+  flex: 1;
+  text-align: left;
+}
+
+/* 操作数量显示 */
+.accordion-count {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.25rem 0.625rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.08);
+  margin-right: 0.75rem;
+}
+
+.count-executable {
+  color: #64748b;
+  transition: color 0.3s ease;
+}
+
+.count-executable.has-executable {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.count-separator {
+  color: #94a3b8;
+  margin: 0 0.25rem;
+}
+
+.count-total {
+  color: #94a3b8;
+}
+
+/* 展开/折叠箭头 - 旋转动画 */
+.accordion-arrow {
+  font-size: 0.75rem;
+  color: #64748b;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              color 0.3s ease;
+  display: inline-block;
+}
+
+.accordion-arrow.expanded {
+  transform: rotate(180deg);
+  color: #3b82f6;
+}
+
+.accordion-header:hover .accordion-arrow {
+  color: #3b82f6;
+}
+
+/* 手风琴内容区域 - 展开/折叠动画 */
+.accordion-content {
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: top center;
+}
+
+.accordion-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  transform: scaleY(0.95);
+}
+
+.accordion-content.expanded {
+  max-height: 2000px;
+  opacity: 1;
+  padding: 0.75rem 0 0 0;
+  transform: scaleY(1);
+}
+
+/* 操作列表 - 子项动画 */
+.accordion-operations {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 0 0.25rem;
+}
+
+/* 操作项入场动画 */
+.accordion-content.expanded .accordion-operations > * {
+  animation: slideInFade 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+.accordion-content.expanded .accordion-operations > *:nth-child(1) { animation-delay: 0.05s; }
+.accordion-content.expanded .accordion-operations > *:nth-child(2) { animation-delay: 0.1s; }
+.accordion-content.expanded .accordion-operations > *:nth-child(3) { animation-delay: 0.15s; }
+.accordion-content.expanded .accordion-operations > *:nth-child(4) { animation-delay: 0.2s; }
+.accordion-content.expanded .accordion-operations > *:nth-child(5) { animation-delay: 0.25s; }
+.accordion-content.expanded .accordion-operations > *:nth-child(n+6) { animation-delay: 0.3s; }
+
+@keyframes slideInFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 空状态 */
+.accordion-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  color: #94a3b8;
+}
+
+.accordion-empty .empty-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.6;
+}
+
+.accordion-empty .empty-text {
+  font-size: 0.85rem;
+}
+
+/* ============ 类别特定样式 ============ */
+
+/* 数据获取 - 灰色/银色主题 */
+.category-accordion.data .accordion-header {
+  border-color: #cbd5e1;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.category-accordion.data .accordion-header:hover {
+  border-color: #94a3b8;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+
+.category-accordion.data .accordion-name {
+  color: #475569;
+}
+
+.category-accordion.data .accordion-count {
+  background: rgba(100, 116, 139, 0.12);
+}
+
+/* 模型训练 - 蓝色主题 */
+.category-accordion.training .accordion-header {
+  border-color: #93c5fd;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.category-accordion.training .accordion-header:hover {
+  border-color: #60a5fa;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.category-accordion.training .accordion-name {
+  color: #1d4ed8;
+}
+
+.category-accordion.training .accordion-count {
+  background: rgba(59, 130, 246, 0.12);
+}
+
+/* 系统维护 - 绿色主题 */
+.category-accordion.maintenance .accordion-header {
+  border-color: #86efac;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.category-accordion.maintenance .accordion-header:hover {
+  border-color: #4ade80;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+}
+
+.category-accordion.maintenance .accordion-name {
+  color: #15803d;
+}
+
+.category-accordion.maintenance .accordion-count {
+  background: rgba(34, 197, 94, 0.12);
+}
+
+/* 专项培养 - 紫色主题 */
+.category-accordion.dimension .accordion-header {
+  border-color: #c4b5fd;
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+}
+
+.category-accordion.dimension .accordion-header:hover {
+  border-color: #a78bfa;
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+}
+
+.category-accordion.dimension .accordion-name {
+  color: #6d28d9;
+}
+
+.category-accordion.dimension .accordion-count {
+  background: rgba(139, 92, 246, 0.12);
+}
+
+/* 付费提升 - 金色主题 */
+.category-accordion.premium .accordion-header {
+  border-color: #fcd34d;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.category-accordion.premium .accordion-header:hover {
+  border-color: #fbbf24;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.category-accordion.premium .accordion-name {
+  color: #b45309;
+}
+
+.category-accordion.premium .accordion-count {
+  background: rgba(245, 158, 11, 0.12);
+}
+
+/* 团队管理 - 青色主题 */
+.category-accordion.team .accordion-header {
+  border-color: #67e8f9;
+  background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+}
+
+.category-accordion.team .accordion-header:hover {
+  border-color: #22d3ee;
+  background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
+}
+
+.category-accordion.team .accordion-name {
+  color: #0e7490;
+}
+
+.category-accordion.team .accordion-count {
+  background: rgba(6, 182, 212, 0.12);
+}
+
+/* 外快任务 - 橙色主题 */
+.category-accordion.sideJob .accordion-header {
+  border-color: #fdba74;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+}
+
+.category-accordion.sideJob .accordion-header:hover {
+  border-color: #fb923c;
+  background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+}
+
+.category-accordion.sideJob .accordion-name {
+  color: #c2410c;
+}
+
+.category-accordion.sideJob .accordion-count {
+  background: rgba(249, 115, 22, 0.12);
+}
+
+/* ============ 展开状态样式 ============ */
+
+.category-accordion.expanded .accordion-header {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.category-accordion.expanded .accordion-content {
+  border: 2px solid;
+  border-top: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.category-accordion.data.expanded .accordion-content {
+  border-color: #cbd5e1;
+}
+
+.category-accordion.training.expanded .accordion-content {
+  border-color: #93c5fd;
+}
+
+.category-accordion.maintenance.expanded .accordion-content {
+  border-color: #86efac;
+}
+
+.category-accordion.dimension.expanded .accordion-content {
+  border-color: #c4b5fd;
+}
+
+.category-accordion.premium.expanded .accordion-content {
+  border-color: #fcd34d;
+}
+
+.category-accordion.team.expanded .accordion-content {
+  border-color: #67e8f9;
+}
+
+.category-accordion.sideJob.expanded .accordion-content {
+  border-color: #fdba74;
+}
+
+/* ============ 响应式设计 ============ */
+
+@media (max-width: 768px) {
+  .accordion-header {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9rem;
+  }
+
+  .accordion-icon {
+    font-size: 1.1rem;
+    margin-right: 0.5rem;
+  }
+
+  .accordion-count {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .accordion-operations {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .accordion-header {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .accordion-icon {
+    font-size: 1rem;
+  }
+
+  .accordion-name {
+    font-size: 0.85rem;
+  }
+
+  .accordion-count {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .accordion-arrow {
+    font-size: 0.65rem;
+  }
+
+  .category-accordion.expanded .accordion-content {
+    padding: 0.5rem;
+  }
+}

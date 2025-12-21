@@ -1,0 +1,402 @@
+/**
+ * HiringPool 组件样式
+ * 需求: 18.1, 18.5
+ * 
+ * 样式特性:
+ * - 候选人卡片悬停动画
+ * - 雇佣按钮渐变效果
+ * - 词条标签彩色主题
+ */
+
+.hiring-pool {
+  background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.hiring-pool-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 0 0 0.875rem 0;
+}
+
+.title-icon {
+  font-size: 1.125rem;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.candidate-count {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748b;
+  background: #e2e8f0;
+  padding: 0.125rem 0.5rem;
+  border-radius: 8px;
+}
+
+/* 无候选人提示 */
+.no-candidates {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  border: 2px dashed #cbd5e1;
+}
+
+/* 候选人列表 */
+.candidates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+/* 候选人卡片 */
+.candidate-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 稀有度边框样式 */
+.candidate-card.rarity-common {
+  border-left: 3px solid #9e9e9e;
+}
+
+.candidate-card.rarity-rare {
+  border-left: 3px solid #2196f3;
+}
+
+.candidate-card.rarity-epic {
+  border-left: 3px solid #9c27b0;
+}
+
+.candidate-card.rarity-legendary {
+  border-left: 3px solid #ff9800;
+  background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.candidate-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.candidate-card:hover {
+  border-color: #86efac;
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.12);
+  transform: translateY(-2px);
+}
+
+.candidate-card:hover::before {
+  opacity: 1;
+}
+
+.candidate-card.unaffordable {
+  opacity: 0.6;
+  background: #f8fafc;
+}
+
+.candidate-card.unaffordable:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #e2e8f0;
+}
+
+.candidate-card.unaffordable::before {
+  display: none;
+}
+
+/* 候选人头部 */
+.candidate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.candidate-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.candidate-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.01em;
+}
+
+/* 稀有度徽章 */
+.candidate-rarity {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #fff;
+  padding: 0.125rem 0.4rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.candidate-rarity.rarity-legendary {
+  animation: legendaryPulse 2s ease-in-out infinite;
+}
+
+@keyframes legendaryPulse {
+  0%, 100% { 
+    box-shadow: 0 0 4px rgba(255, 152, 0, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 8px rgba(255, 152, 0, 0.7);
+  }
+}
+
+.candidate-cost {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ca8a04;
+  background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
+  padding: 0.2rem 0.625rem;
+  border-radius: 8px;
+  border: 1px solid #fde047;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.candidate-cost::before {
+  content: '💰';
+  font-size: 0.75rem;
+}
+
+/* 候选人基础属性 */
+.candidate-stats {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.625rem;
+}
+
+.stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 6px;
+  border: 1px solid #bae6fd;
+}
+
+.stat-badge .stat-icon {
+  font-size: 0.75rem;
+}
+
+.stat-badge .stat-val {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+/* 候选人工资预览 */
+.candidate-salary {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.625rem;
+  padding: 0.375rem 0.5rem;
+  background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
+  border-radius: 6px;
+  border: 1px solid #fde047;
+}
+
+.candidate-salary .salary-icon {
+  font-size: 0.75rem;
+}
+
+.candidate-salary .salary-text {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #92400e;
+}
+
+/* 候选人词条 */
+.candidate-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.875rem;
+  min-height: 1.5rem;
+}
+
+/* 无词条提示 */
+.no-traits-hint {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.candidate-trait {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: help;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.candidate-trait:hover {
+  transform: scale(1.05);
+}
+
+.candidate-trait .trait-icon {
+  font-size: 0.85rem;
+}
+
+.candidate-trait .trait-name {
+  font-weight: 600;
+}
+
+/* 候选人词条颜色主题 */
+.candidate-trait.algorithm_expert {
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+  border-color: #c4b5fd;
+  color: #6d28d9;
+}
+
+.candidate-trait.data_engineer {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.candidate-trait.architect {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border-color: #86efac;
+  color: #15803d;
+}
+
+.candidate-trait.product_manager {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #fcd34d;
+  color: #b45309;
+}
+
+.candidate-trait.fullstack {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+  border-color: #d8b4fe;
+  color: #7c3aed;
+}
+
+.candidate-trait.efficiency {
+  background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+  border-color: #fdba74;
+  color: #c2410c;
+}
+
+.candidate-trait.cost_control {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-color: #6ee7b7;
+  color: #047857;
+}
+
+.candidate-trait.data_mining {
+  background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
+  border-color: #67e8f9;
+  color: #0e7490;
+}
+
+/* 雇佣按钮 */
+.hire-button {
+  width: 100%;
+  padding: 0.625rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hire-button:hover:not(.disabled) {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+}
+
+.hire-button:active:not(.disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.25);
+}
+
+.hire-button.disabled {
+  background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .hiring-pool {
+    padding: 0.875rem;
+  }
+  
+  .candidate-card {
+    padding: 0.875rem;
+  }
+  
+  .candidate-name {
+    font-size: 0.9rem;
+  }
+  
+  .candidate-trait {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hiring-pool {
+    padding: 0.75rem;
+  }
+  
+  .candidate-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.375rem;
+  }
+  
+  .candidate-cost {
+    align-self: flex-end;
+  }
+}

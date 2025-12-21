@@ -1,0 +1,143 @@
+/**
+ * EquipmentPanel 组件样式
+ */
+
+.equipment-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.equipment-panel .panel-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.equipment-item {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.equipment-item.can-upgrade {
+  border-color: #4a90d9;
+  background: linear-gradient(135deg, #f0f7ff 0%, #e8f4ff 100%);
+}
+
+.equipment-item.can-upgrade:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 217, 0.2);
+}
+
+.equipment-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.equipment-icon {
+  font-size: 1.5rem;
+}
+
+.equipment-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.equipment-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.equipment-level {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.equipment-current {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+}
+
+.current-name {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.current-bonus {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #22c55e;
+}
+
+.upgrade-button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #4a90d9 0%, #357abd 100%);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upgrade-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #357abd 0%, #2563eb 100%);
+  transform: scale(1.02);
+}
+
+.upgrade-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.upgrade-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.upgrade-cost {
+  font-size: 0.7rem;
+  opacity: 0.9;
+}
+
+.max-level {
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  color: #22c55e;
+  font-weight: 600;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .equipment-grid {
+    grid-template-columns: 1fr;
+  }
+}

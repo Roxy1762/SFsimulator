@@ -1,0 +1,317 @@
+/**
+ * OperationButton 组件样式
+ * 需求: 8.4, 8.5
+ */
+
+.operation-button {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 涟漪效果容器 */
+.operation-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.operation-button:active:not(.disabled)::before {
+  width: 300px;
+  height: 300px;
+}
+
+.operation-button:hover:not(.disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.operation-button:active:not(.disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* 执行成功动画 */
+.operation-button.executed {
+  animation: executeSuccess 0.5s ease-out;
+}
+
+@keyframes executeSuccess {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(0.95);
+  }
+  60% {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 数据操作 - 灰色/银色主题 */
+.operation-button.data {
+  border-color: #94a3b8;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.operation-button.data:hover:not(.disabled) {
+  border-color: #64748b;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  box-shadow: 0 6px 20px rgba(100, 116, 139, 0.2);
+}
+
+.operation-button.data .operation-icon {
+  color: #64748b;
+}
+
+/* 训练操作 - 蓝色主题 */
+.operation-button.training {
+  border-color: #60a5fa;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.operation-button.training:hover:not(.disabled) {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25);
+}
+
+.operation-button.training .operation-icon {
+  color: #3b82f6;
+}
+
+/* 维护操作 - 绿色主题 */
+.operation-button.maintenance {
+  border-color: #4ade80;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.operation-button.maintenance:hover:not(.disabled) {
+  border-color: #22c55e;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.25);
+}
+
+.operation-button.maintenance .operation-icon {
+  color: #22c55e;
+}
+
+/* 禁用状态 */
+.operation-button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(30%);
+  transform: none !important;
+}
+
+.operation-button.disabled:hover {
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* 禁用状态抖动提示 */
+.operation-button.disabled.shake-hint {
+  animation: disabledShake 0.4s ease-in-out;
+}
+
+@keyframes disabledShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-4px);
+  }
+  40%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+/* 操作头部 */
+.operation-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.operation-icon {
+  font-size: 1.25rem;
+  margin-right: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.operation-button:hover:not(.disabled) .operation-icon {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.operation-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  transition: color 0.3s ease;
+}
+
+/* 操作描述 */
+.operation-description {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+
+/* 操作详情 */
+.operation-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.operation-cost,
+.operation-effects {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.detail-label {
+  color: #94a3b8;
+  margin-right: 0.5rem;
+  min-width: 2.5rem;
+}
+
+.detail-value {
+  color: #475569;
+  font-weight: 500;
+}
+
+/* 警告提示 */
+.operation-warning {
+  margin-top: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #dc2626;
+  animation: warningPulse 2s infinite;
+}
+
+@keyframes warningPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* 赌博操作特殊样式 */
+.operation-button.gamble {
+  position: relative;
+}
+
+.operation-button.gamble::after {
+  content: '🎲';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1rem;
+  animation: diceRoll 3s infinite;
+}
+
+@keyframes diceRoll {
+  0%, 90%, 100% {
+    transform: rotate(0deg);
+  }
+  92%, 96% {
+    transform: rotate(-15deg);
+  }
+  94%, 98% {
+    transform: rotate(15deg);
+  }
+}
+
+/* 高风险操作提示 */
+.operation-button.high-risk {
+  border-style: dashed;
+}
+
+.operation-button.high-risk .operation-name::after {
+  content: ' ⚠️';
+  font-size: 0.9rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .operation-button {
+    padding: 0.875rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .operation-button {
+    padding: 0.875rem;
+  }
+
+  .operation-name {
+    font-size: 0.95rem;
+  }
+
+  .operation-description {
+    font-size: 0.8rem;
+  }
+
+  .operation-cost,
+  .operation-effects {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .operation-button {
+    padding: 0.75rem;
+  }
+  
+  .operation-icon {
+    font-size: 1.1rem;
+  }
+  
+  .operation-name {
+    font-size: 0.9rem;
+  }
+  
+  .operation-description {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .operation-details {
+    padding-top: 0.5rem;
+  }
+  
+  .detail-label {
+    min-width: 2rem;
+  }
+}

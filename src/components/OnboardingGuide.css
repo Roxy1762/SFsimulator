@@ -1,0 +1,489 @@
+/**
+ * OnboardingGuide 组件样式
+ * 新手引导系统的视觉效果和动画
+ * 
+ * 需求: 29.3, 29.4
+ */
+
+/* ==================== 遮罩层 ==================== */
+
+.onboarding-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.onboarding-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: auto;
+}
+
+.onboarding-mask-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 高亮区域动画 */
+.highlight-animate {
+  animation: highlightPulse 0.3s ease-out;
+}
+
+@keyframes highlightPulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==================== 高亮边框 ==================== */
+
+.onboarding-highlight {
+  position: fixed;
+  border: 3px solid #667eea;
+  border-radius: 12px;
+  box-shadow: 
+    0 0 0 4px rgba(102, 126, 234, 0.3),
+    0 0 20px rgba(102, 126, 234, 0.4),
+    inset 0 0 20px rgba(102, 126, 234, 0.1);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2001;
+}
+
+.onboarding-highlight.animate {
+  animation: highlightAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes highlightAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 高亮边框呼吸动画 */
+.onboarding-highlight::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border: 2px solid rgba(102, 126, 234, 0.5);
+  border-radius: 16px;
+  animation: highlightBreath 2s ease-in-out infinite;
+}
+
+@keyframes highlightBreath {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
+}
+
+/* ==================== 提示框 ==================== */
+
+.onboarding-tooltip {
+  position: fixed;
+  width: 320px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: auto;
+  z-index: 2002;
+  overflow: hidden;
+}
+
+.onboarding-tooltip.animate {
+  animation: tooltipAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes tooltipAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==================== 箭头指示 ==================== */
+
+.tooltip-arrow {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+.tooltip-arrow.top {
+  bottom: -8px;
+  left: 50%;
+  margin-left: -8px;
+  border-top: none;
+  border-left: none;
+}
+
+.tooltip-arrow.bottom {
+  top: -8px;
+  left: 50%;
+  margin-left: -8px;
+  border-bottom: none;
+  border-right: none;
+}
+
+.tooltip-arrow.left {
+  right: -8px;
+  top: 50%;
+  margin-top: -8px;
+  border-top: none;
+  border-left: none;
+}
+
+.tooltip-arrow.right {
+  left: -8px;
+  top: 50%;
+  margin-top: -8px;
+  border-bottom: none;
+  border-right: none;
+}
+
+/* ==================== 提示框头部 ==================== */
+
+.tooltip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltip-title-area {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tooltip-icon {
+  font-size: 1.5rem;
+}
+
+.tooltip-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.tooltip-step-indicator {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+}
+
+/* ==================== 提示框内容 ==================== */
+
+.tooltip-content {
+  padding: 1rem 1.25rem;
+}
+
+.tooltip-description {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 0.75rem 0;
+}
+
+/* 小贴士 */
+.tooltip-tips {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.tooltip-tips .tips-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f59e0b;
+  margin-bottom: 0.4rem;
+}
+
+.tooltip-tips .tips-icon {
+  font-size: 0.9rem;
+}
+
+.tooltip-tips .tips-list {
+  margin: 0;
+  padding-left: 1rem;
+  list-style-type: disc;
+}
+
+.tooltip-tips .tips-list li {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  margin-bottom: 0.2rem;
+}
+
+.tooltip-tips .tips-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* ==================== 进度指示器 ==================== */
+
+.tooltip-progress {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.progress-dot:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.2);
+}
+
+.progress-dot.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+  transform: scale(1.2);
+}
+
+.progress-dot.completed {
+  background: rgba(102, 126, 234, 0.5);
+}
+
+/* ==================== 提示框底部 ==================== */
+
+.tooltip-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tooltip-nav-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tooltip-button {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tooltip-button.skip {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.tooltip-button.skip:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tooltip-button.prev {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tooltip-button.prev:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.tooltip-button.next {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tooltip-button.next.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.tooltip-button.next.primary:hover {
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transform: translateY(-1px);
+}
+
+.tooltip-button .nav-arrow {
+  font-size: 0.9rem;
+}
+
+/* ==================== 响应式设计 ==================== */
+
+@media (max-width: 768px) {
+  .onboarding-tooltip {
+    width: calc(100vw - 32px);
+    max-width: 320px;
+  }
+
+  .tooltip-header {
+    padding: 0.875rem 1rem;
+  }
+
+  .tooltip-icon {
+    font-size: 1.25rem;
+  }
+
+  .tooltip-title {
+    font-size: 1rem;
+  }
+
+  .tooltip-content {
+    padding: 0.875rem 1rem;
+  }
+
+  .tooltip-description {
+    font-size: 0.85rem;
+  }
+
+  .tooltip-tips {
+    padding: 0.6rem;
+  }
+
+  .tooltip-tips .tips-header {
+    font-size: 0.75rem;
+  }
+
+  .tooltip-tips .tips-list li {
+    font-size: 0.75rem;
+  }
+
+  .tooltip-progress {
+    padding: 0.6rem 1rem;
+  }
+
+  .progress-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .tooltip-footer {
+    padding: 0.6rem 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tooltip-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .tooltip-nav-buttons {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .onboarding-tooltip {
+    width: calc(100vw - 24px);
+  }
+
+  .tooltip-header {
+    padding: 0.75rem;
+  }
+
+  .tooltip-content {
+    padding: 0.75rem;
+  }
+
+  .tooltip-footer {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* ==================== 减少动画偏好 ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .onboarding-highlight,
+  .onboarding-tooltip {
+    animation: none;
+  }
+
+  .onboarding-highlight::after {
+    animation: none;
+  }
+
+  .highlight-animate {
+    animation: none;
+  }
+
+  .progress-dot:hover,
+  .progress-dot.active {
+    transform: none;
+  }
+
+  .tooltip-button.next.primary:hover {
+    transform: none;
+  }
+}
