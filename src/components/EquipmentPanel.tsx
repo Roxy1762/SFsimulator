@@ -73,12 +73,9 @@ export function EquipmentPanel() {
   const isGameOver = gameState.gameStatus !== 'playing';
 
   return (
-    <div className="equipment-panel" role="region" aria-label="设备升级面板" tabIndex={0}>
-      <h3 className="panel-title">
-        <span className="title-icon" aria-hidden="true">🔧</span>
-        设备升级
-      </h3>
-      <div className="equipment-grid" role="list" aria-label="设备列表">
+    <div className="equipment-panel">
+      <h3 className="panel-title">设备升级</h3>
+      <div className="equipment-grid">
         {(['gpu', 'storage', 'network', 'cooling'] as EquipmentType[]).map(type => (
           <EquipmentItem
             key={type}

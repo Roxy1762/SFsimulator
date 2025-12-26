@@ -441,112 +441,6 @@ export interface Risks {
 export type GameStatusType = 'playing' | 'gameOver' | 'victory';
 
 /**
- * 结局类型
- * - bankruptcy: 破产结局（资金连续为负）
- * - entropy_collapse: 熵值崩溃（熵值过高导致系统崩溃）
- * - legal_shutdown: 法律制裁（法律风险过高）
- * - ascension: 算法飞升（达成胜利条件）
- * - tech_singularity: 技术奇点（完美结局）
- * - market_domination: 市场统治（商业成功结局）
- * - academic_breakthrough: 学术突破（研究成功结局）
- */
-export type EndingType = 
-  | 'bankruptcy'
-  | 'entropy_collapse'
-  | 'legal_shutdown'
-  | 'ascension'
-  | 'tech_singularity'
-  | 'market_domination'
-  | 'academic_breakthrough';
-
-/**
- * 结局配置
- */
-export interface EndingConfig {
-  type: EndingType;
-  title: string;
-  subtitle: string;
-  description: string;
-  icon: string;
-  isVictory: boolean;
-  color: string;
-  requirements?: string;
-}
-
-/**
- * 结局配置对象
- */
-export const ENDING_CONFIGS: Record<EndingType, EndingConfig> = {
-  bankruptcy: {
-    type: 'bankruptcy',
-    title: '破产清算',
-    subtitle: '资金链断裂',
-    description: '你的算法帝国因资金枯竭而崩塌。投资人撤资，团队解散，服务器被关停。但每一次失败都是通往成功的阶梯...',
-    icon: '💸',
-    isVictory: false,
-    color: '#e74c3c',
-  },
-  entropy_collapse: {
-    type: 'entropy_collapse',
-    title: '系统崩溃',
-    subtitle: '技术债务爆发',
-    description: '过高的熵值导致系统完全失控。代码变成了无法维护的意大利面条，服务器在一片混乱中停止运转...',
-    icon: '💥',
-    isVictory: false,
-    color: '#e67e22',
-  },
-  legal_shutdown: {
-    type: 'legal_shutdown',
-    title: '法律制裁',
-    subtitle: '监管介入',
-    description: '你的算法因数据合规问题被监管机构叫停。巨额罚款和法律诉讼让公司无法继续运营...',
-    icon: '⚖️',
-    isVictory: false,
-    color: '#9b59b6',
-  },
-  ascension: {
-    type: 'ascension',
-    title: '算法飞升',
-    subtitle: '突破极限',
-    description: '你的算法达到了前所未有的高度！它不仅能预测用户行为，还能引导人类走向更美好的未来。你成功实现了算法飞升！',
-    icon: '🚀',
-    isVictory: true,
-    color: '#3498db',
-    requirements: '拟合度达到95%，所有维度达到80以上',
-  },
-  tech_singularity: {
-    type: 'tech_singularity',
-    title: '技术奇点',
-    subtitle: '完美算法',
-    description: '你创造了完美的算法！它超越了人类的理解，成为了真正的人工智能。整个世界都在你的算法指引下运转...',
-    icon: '🌟',
-    isVictory: true,
-    color: '#f1c40f',
-    requirements: '拟合度达到100%，熵值为0，所有维度达到100',
-  },
-  market_domination: {
-    type: 'market_domination',
-    title: '市场统治',
-    subtitle: '商业帝国',
-    description: '你的算法统治了整个市场！每一个用户的注意力都被你的推荐系统牢牢掌控。你建立了一个真正的商业帝国！',
-    icon: '👑',
-    isVictory: true,
-    color: '#2ecc71',
-    requirements: '资金达到100000，声望达到80以上',
-  },
-  academic_breakthrough: {
-    type: 'academic_breakthrough',
-    title: '学术突破',
-    subtitle: '科研巅峰',
-    description: '你的研究成果震惊了学术界！多篇顶级论文发表，算法理论取得重大突破。你成为了AI领域的传奇人物！',
-    icon: '🎓',
-    isVictory: true,
-    color: '#1abc9c',
-    requirements: '通过10次考核，准确率达到90以上',
-  },
-};
-
-/**
  * 完整游戏状态
  */
 export interface GameState {
@@ -563,7 +457,6 @@ export interface GameState {
   hiringPool: TeamMember[];   // 可雇佣候选人池
   gameStatus: GameStatusType;
   gameOverReason?: string;
-  endingType?: EndingType;    // 结局类型
   version?: string;           // 存档版本号
 }
 

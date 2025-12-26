@@ -1,7 +1,6 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  /* 需求: 9.4 - 确保行高可读性 */
-  line-height: 1.4;
+  line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
@@ -23,25 +22,5 @@
 body {
   margin: 0;
   min-width: 320px;
-  /* iOS Safari 100vh 问题修复 - 需求: 12.1 */
   min-height: 100vh;
-  min-height: -webkit-fill-available;
-  /* 需求: 9.1 - 移动端最小字体 14px */
-  font-size: 16px;
-  /* 需求: 9.4 - 确保行高可读性 */
-  line-height: 1.4;
-}
-
-/* iOS Safari 100dvh 支持 - 需求: 12.1 */
-@supports (min-height: 100dvh) {
-  body {
-    min-height: 100dvh;
-  }
-}
-
-/* 需求: 9.1 - 移动端最小字体 14px */
-@media (max-width: 479px) {
-  body {
-    font-size: 14px;
-  }
 }

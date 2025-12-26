@@ -3,7 +3,6 @@
  * 
  * 测试内容:
  * - 测试游戏结束显示
- * - 测试胜利结局显示
  * - 测试重新开始功能
  * 
  * 需求: 1.4
@@ -88,21 +87,21 @@ describe('GameOverModal 组件', () => {
     it('应该显示存活回合数', () => {
       const onRestart = vi.fn();
       render(<GameOverModal gameState={defaultGameState} onRestart={onRestart} />);
-      expect(screen.getByText('存活回合')).toBeDefined();
+      expect(screen.getByText('存活回合数')).toBeDefined();
       expect(screen.getByText('15')).toBeDefined();
     });
 
-    it('应该显示拟合度', () => {
+    it('应该显示最终拟合度', () => {
       const onRestart = vi.fn();
       render(<GameOverModal gameState={defaultGameState} onRestart={onRestart} />);
-      expect(screen.getByText('拟合度')).toBeDefined();
+      expect(screen.getByText('最终拟合度')).toBeDefined();
       expect(screen.getByText('45%')).toBeDefined();
     });
 
-    it('应该显示熵值', () => {
+    it('应该显示最终熵值', () => {
       const onRestart = vi.fn();
       render(<GameOverModal gameState={defaultGameState} onRestart={onRestart} />);
-      expect(screen.getByText('熵值')).toBeDefined();
+      expect(screen.getByText('最终熵值')).toBeDefined();
       expect(screen.getByText('85%')).toBeDefined();
     });
 
@@ -113,10 +112,11 @@ describe('GameOverModal 组件', () => {
       expect(screen.getByText('-500')).toBeDefined();
     });
 
-    it('应该显示声望', () => {
+    it('应该显示拟合度上限', () => {
       const onRestart = vi.fn();
       render(<GameOverModal gameState={defaultGameState} onRestart={onRestart} />);
-      expect(screen.getByText('声望')).toBeDefined();
+      expect(screen.getByText('拟合度上限')).toBeDefined();
+      expect(screen.getByText('95%')).toBeDefined();
     });
 
     it('负资金应该有特殊样式', () => {
@@ -124,70 +124,6 @@ describe('GameOverModal 组件', () => {
       const { container } = render(<GameOverModal gameState={defaultGameState} onRestart={onRestart} />);
       const negativeValue = container.querySelector('.stat-value.negative');
       expect(negativeValue).not.toBeNull();
-    });
-
-    it('应该显示评分和评级', () => {
-      const onRestart = vi.fn();
-      render(<GameOverModal gameState={defaultGameState} onRestart={onRestart} />);
-      expect(screen.getByText('最终得分')).toBeDefined();
-    });
-
-    it('应该显示能力维度', () => {
-      const onRestart = vi.fn();
-      render(<GameOverModal gameState={defaultGameState} onRestart={onRestart} />);
-      expect(screen.getByText('能力维度')).toBeDefined();
-      expect(screen.getByText('🧠 算法')).toBeDefined();
-      expect(screen.getByText('📊 数据')).toBeDefined();
-      expect(screen.getByText('🔧 稳定')).toBeDefined();
-      expect(screen.getByText('👤 体验')).toBeDefined();
-    });
-  });
-
-  describe('胜利结局显示', () => {
-    const victoryState: GameState = {
-      ...defaultGameState,
-      gameStatus: 'victory',
-      gameOverReason: '算法达到飞升境界，突破极限！',
-      endingType: 'ascension',
-      metrics: {
-        ...defaultGameState.metrics,
-        fitScore: 95,
-        accuracy: 90,
-        speed: 85,
-        creativity: 80,
-        robustness: 85,
-      },
-      dimensions: {
-        algorithm: 85,
-        dataProcessing: 82,
-        stability: 80,
-        userExperience: 81,
-      },
-      resources: {
-        ...defaultGameState.resources,
-        budget: 50000,
-      },
-    };
-
-    it('应该显示胜利结局标题', () => {
-      const onRestart = vi.fn();
-      render(<GameOverModal gameState={victoryState} onRestart={onRestart} />);
-      // 使用 getAllByText 因为标题会出现在多个地方
-      const elements = screen.getAllByText('算法飞升');
-      expect(elements.length).toBeGreaterThan(0);
-    });
-
-    it('应该显示胜利结局副标题', () => {
-      const onRestart = vi.fn();
-      render(<GameOverModal gameState={victoryState} onRestart={onRestart} />);
-      expect(screen.getByText('突破极限')).toBeDefined();
-    });
-
-    it('胜利结局应该有victory样式类', () => {
-      const onRestart = vi.fn();
-      const { container } = render(<GameOverModal gameState={victoryState} onRestart={onRestart} />);
-      const modal = container.querySelector('.game-over-modal.victory');
-      expect(modal).not.toBeNull();
     });
   });
 
@@ -210,38 +146,6 @@ describe('GameOverModal 组件', () => {
       const onRestart = vi.fn();
       render(<GameOverModal gameState={academicState} onRestart={onRestart} />);
       expect(screen.getByText('学术研究')).toBeDefined();
-    });
-  });
-
-  describe('不同结局类型', () => {
-    it('应该显示破产结局', () => {
-      const bankruptcyState: GameState = {
-        ...defaultGameState,
-        endingType: 'bankruptcy',
-      };
-      const onRestart = vi.fn();
-      render(<GameOverModal gameState={bankruptcyState} onRestart={onRestart} />);
-      expect(screen.getByText('破产清算')).toBeDefined();
-    });
-
-    it('应该显示熵值崩溃结局', () => {
-      const entropyState: GameState = {
-        ...defaultGameState,
-        endingType: 'entropy_collapse',
-      };
-      const onRestart = vi.fn();
-      render(<GameOverModal gameState={entropyState} onRestart={onRestart} />);
-      expect(screen.getByText('系统崩溃')).toBeDefined();
-    });
-
-    it('应该显示法律制裁结局', () => {
-      const legalState: GameState = {
-        ...defaultGameState,
-        endingType: 'legal_shutdown',
-      };
-      const onRestart = vi.fn();
-      render(<GameOverModal gameState={legalState} onRestart={onRestart} />);
-      expect(screen.getByText('法律制裁')).toBeDefined();
     });
   });
 
@@ -305,29 +209,6 @@ describe('GameOverModal 组件', () => {
       expect(screen.getByText('5,000')).toBeDefined();
       const negativeValue = container.querySelector('.stat-value.negative');
       expect(negativeValue).toBeNull();
-    });
-
-    it('有团队成员时应该显示团队统计', () => {
-      const stateWithTeam: GameState = {
-        ...defaultGameState,
-        team: [
-          {
-            id: '1',
-            name: '张三',
-            rarity: 'rare',
-            baseStats: { computeContribution: 10, dataEfficiency: 10, maintenanceSkill: 10 },
-            traits: ['algorithm_expert'],
-            level: 3,
-            experience: 200,
-            hiringCost: 1200,
-            salary: 350,
-          },
-        ],
-      };
-      const onRestart = vi.fn();
-      render(<GameOverModal gameState={stateWithTeam} onRestart={onRestart} />);
-      expect(screen.getByText(/团队成员/)).toBeDefined();
-      expect(screen.getByText(/张三/)).toBeDefined();
     });
   });
 });

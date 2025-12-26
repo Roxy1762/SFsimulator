@@ -18,7 +18,6 @@ import type {
   Dimensions,
   DimensionType,
   TeamMember,
-  EndingType,
 } from '../types';
 import { DIFFICULTY_CONFIGS, TRAIT_CONFIGS } from '../types';
 import { ExamSystem, EXAM_INTERVAL } from './ExamSystem';
@@ -680,18 +679,6 @@ export class GameEngine {
   static checkGameOver(state: GameState): GameState {
     if (state.gameStatus !== 'playing') return state;
 
-    // 检查胜利条件
-    const victoryResult = this.checkVictoryConditions(state);
-    if (victoryResult) {
-      return {
-        ...state,
-        gameStatus: 'victory',
-        gameOverReason: victoryResult.reason,
-        endingType: victoryResult.endingType,
-      };
-    }
-
-    // 检查失败条件：资金连续为负
     if (state.resources.budget < 0) {
       const newConsecutiveNegative = state.progress.consecutiveNegativeBudget + 1;
       if (newConsecutiveNegative >= 2) {
@@ -700,7 +687,6 @@ export class GameEngine {
           progress: { ...state.progress, consecutiveNegativeBudget: newConsecutiveNegative },
           gameStatus: 'gameOver',
           gameOverReason: '资金连续2回合为负数，公司破产！',
-          endingType: 'bankruptcy',
         };
       }
       return {
@@ -709,89 +695,10 @@ export class GameEngine {
       };
     }
 
-    // 检查失败条件：熵值过高导致系统崩溃
-    if (state.metrics.entropy >= 100) {
-      return {
-        ...state,
-        gameStatus: 'gameOver',
-        gameOverReason: '系统熵值达到临界点，技术债务爆发！',
-        endingType: 'entropy_collapse',
-      };
-    }
-
-    // 检查失败条件：法律风险过高
-    if (state.risks.legalRisk >= 100) {
-      return {
-        ...state,
-        gameStatus: 'gameOver',
-        gameOverReason: '法律风险过高，监管机构强制关停！',
-        endingType: 'legal_shutdown',
-      };
-    }
-
     return {
       ...state,
       progress: { ...state.progress, consecutiveNegativeBudget: 0 },
     };
-  }
-
-  /**
-   * 检查胜利条件
-   * 返回结局类型和原因，如果没有达成胜利条件则返回 null
-   */
-  static checkVictoryConditions(state: GameState): { endingType: EndingType; reason: string } | null {
-    const { metrics, dimensions, resources, reputation, progress } = state;
-    
-    // 技术奇点：完美结局
-    // 拟合度100%，熵值0，所有维度100
-    if (
-      metrics.fitScore >= 100 &&
-      metrics.entropy === 0 &&
-      dimensions.algorithm >= 100 &&
-      dimensions.dataProcessing >= 100 &&
-      dimensions.stability >= 100 &&
-      dimensions.userExperience >= 100
-    ) {
-      return {
-        endingType: 'tech_singularity',
-        reason: '创造了完美的算法，达成技术奇点！',
-      };
-    }
-
-    // 算法飞升：标准胜利
-    // 拟合度95%以上，所有维度80以上
-    if (
-      metrics.fitScore >= 95 &&
-      dimensions.algorithm >= 80 &&
-      dimensions.dataProcessing >= 80 &&
-      dimensions.stability >= 80 &&
-      dimensions.userExperience >= 80
-    ) {
-      return {
-        endingType: 'ascension',
-        reason: '算法达到飞升境界，突破极限！',
-      };
-    }
-
-    // 市场统治：商业成功结局
-    // 资金100000以上，声望80以上
-    if (resources.budget >= 100000 && reputation >= 80) {
-      return {
-        endingType: 'market_domination',
-        reason: '建立了商业帝国，统治市场！',
-      };
-    }
-
-    // 学术突破：研究成功结局
-    // 通过10次考核，准确率90以上
-    if (progress.examsPassed >= 10 && metrics.accuracy >= 90) {
-      return {
-        endingType: 'academic_breakthrough',
-        reason: '取得重大学术突破，成为领域传奇！',
-      };
-    }
-
-    return null;
   }
 
   static triggerRandomEvent(

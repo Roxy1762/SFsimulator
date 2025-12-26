@@ -236,14 +236,8 @@ describe('Feature: algorithm-ascension-game - SaveSystem', () => {
           const exported = SaveSystem.exportSave(state);
           expect(exported).not.toBeNull();
           
-          // Decode using TextDecoder (new format)
-          const binaryString = atob(exported!);
-          const uint8Array = new Uint8Array(binaryString.length);
-          for (let i = 0; i < binaryString.length; i++) {
-            uint8Array[i] = binaryString.charCodeAt(i);
-          }
-          const decoder = new TextDecoder();
-          const json = decoder.decode(uint8Array);
+          // Decode and parse to verify version is included
+          const json = decodeURIComponent(atob(exported!));
           const saveData = JSON.parse(json);
           
           expect(saveData.version).toBe(CURRENT_SAVE_VERSION);
@@ -275,16 +269,6 @@ describe('Feature: algorithm-ascension-game - SaveSystem', () => {
   });
 });
 
-// ============ Helper function for encoding test data ============
-
-function encodeTestData(data: unknown): string {
-  const json = JSON.stringify(data);
-  const encoder = new TextEncoder();
-  const uint8Array = encoder.encode(json);
-  const binaryString = Array.from(uint8Array, byte => String.fromCharCode(byte)).join('');
-  return btoa(binaryString);
-}
-
 // ============ Unit Tests for Invalid Input Handling ============
 
 describe('SaveSystem - Invalid Input Handling', () => {
@@ -301,34 +285,34 @@ describe('SaveSystem - Invalid Input Handling', () => {
   });
 
   it('should return error for valid Base64 but invalid JSON', () => {
-    const invalidJson = encodeTestData('not json').slice(0, -5) + 'XXXXX'; // Corrupt the data
+    const invalidJson = btoa(encodeURIComponent('not json'));
     const result = SaveSystem.importSave(invalidJson);
     expect(result.success).toBe(false);
     expect(result.error).toContain('JSON');
   });
 
   it('should return error for valid JSON but missing version', () => {
-    const noVersion = encodeTestData({ state: {} });
+    const noVersion = btoa(encodeURIComponent(JSON.stringify({ state: {} })));
     const result = SaveSystem.importSave(noVersion);
     expect(result.success).toBe(false);
     expect(result.error).toContain('版本号');
   });
 
   it('should return error for valid JSON but missing state', () => {
-    const noState = encodeTestData({ version: '1.0.0' });
+    const noState = btoa(encodeURIComponent(JSON.stringify({ version: '1.0.0' })));
     const result = SaveSystem.importSave(noState);
     expect(result.success).toBe(false);
     expect(result.error).toContain('游戏状态');
   });
 
   it('should return error for incomplete game state', () => {
-    const incompleteState = encodeTestData({
+    const incompleteState = btoa(encodeURIComponent(JSON.stringify({
       version: '1.0.0',
       state: {
         resources: { budget: 1000 },
         // Missing other required fields
       }
-    });
+    })));
     const result = SaveSystem.importSave(incompleteState);
     expect(result.success).toBe(false);
     expect(result.error).toContain('不完整');

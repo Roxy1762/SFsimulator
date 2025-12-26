@@ -11,7 +11,7 @@
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 800;
+  z-index: 1000;
   overflow: hidden;
 }
 
@@ -94,20 +94,4 @@
 /* 特殊效果 - 熵值 */
 .resource-change-indicator.entropy::before {
   content: '🔥 ';
-}
-
-
-/* ==================== 减少动画偏好支持 ==================== */
-/* 需求: 12.1 - 尊重用户的 prefers-reduced-motion 设置 */
-
-@media (prefers-reduced-motion: reduce) {
-  .resource-change-indicator {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  
-  .resource-change-indicator.large {
-    animation: none;
-  }
 }

@@ -94,14 +94,14 @@ export function EventLog() {
   const sortedLogs = [...logs].sort((a, b) => a.timestamp - b.timestamp);
 
   return (
-    <div className="event-log" role="region" aria-label="游戏日志面板" tabIndex={0}>
+    <div className="event-log">
       <h3 className="panel-title">
-        <span className="title-icon" aria-hidden="true">📜</span>
+        <span className="title-icon">📜</span>
         游戏日志
-        <span className="log-count" aria-label={`共 ${logs.length} 条日志`}>{logs.length}</span>
+        <span className="log-count">{logs.length}</span>
       </h3>
       
-      <div className="log-container" ref={logContainerRef} role="log" aria-live="polite" aria-label="日志列表">
+      <div className="log-container" ref={logContainerRef}>
         {sortedLogs.length === 0 ? (
           <div className="log-empty">
             <span className="empty-icon">📭</span>

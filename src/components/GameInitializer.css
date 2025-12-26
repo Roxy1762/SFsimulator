@@ -7,18 +7,9 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  /* iOS Safari 100vh 问题修复 - 需求: 12.1 */
   min-height: 100vh;
-  min-height: -webkit-fill-available;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   animation: initializerFadeIn 0.6s ease-out;
-}
-
-/* iOS Safari 100dvh 支持 - 需求: 12.1 */
-@supports (min-height: 100dvh) {
-  .game-initializer {
-    min-height: 100dvh;
-  }
 }
 
 @keyframes initializerFadeIn {

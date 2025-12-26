@@ -6,7 +6,6 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { debounce, DEFAULT_RESIZE_DEBOUNCE_DELAY } from '../utils';
 import './OnboardingGuide.css';
 
 // 本地存储键名
@@ -66,10 +65,10 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     tips: ['考核前确保拟合指数和维度达标', '熵值过高时优先维护']
   },
   {
-    id: 'turn-info',
+    id: 'exam-preview',
     title: '考核预告',
     description: '每5回合进行一次流量考核。考核会根据拟合指数、稳定性和能力维度计算收益。考核失败会扣除资金！',
-    targetSelector: '.turn-info',
+    targetSelector: '.exam-preview',
     position: 'left',
     icon: '🎯',
     tips: ['提前查看考核的维度要求', '平衡发展多个维度']
@@ -135,10 +134,6 @@ function calculateTooltipPosition(
   const tooltipWidth = 320;
   const tooltipHeight = 200; // 估计高度
   
-  // 检测是否为移动端（底部导航栏高度约 60px + safe area）
-  const isMobile = window.innerWidth <= 767;
-  const bottomNavHeight = isMobile ? 80 : 0; // 底部导航栏预留空间
-  
   let top = 0;
   let left = 0;
   let arrowPosition = position;
@@ -173,11 +168,11 @@ function calculateTooltipPosition(
     left = viewportWidth - tooltipWidth - padding;
   }
   
-  // 垂直边界调整（考虑底部导航栏）
+  // 垂直边界调整
   if (top < padding) {
     top = padding;
-  } else if (top + tooltipHeight > viewportHeight - padding - bottomNavHeight) {
-    top = viewportHeight - tooltipHeight - padding - bottomNavHeight;
+  } else if (top + tooltipHeight > viewportHeight - padding) {
+    top = viewportHeight - tooltipHeight - padding;
   }
   
   return { top, left, arrowPosition };
@@ -208,18 +203,9 @@ export function OnboardingGuide({ isActive, onComplete, onSkip }: OnboardingGuid
       setTargetRect(rect);
       setTooltipPosition(calculateTooltipPosition(rect, currentStep.position));
     } else {
-      // 如果找不到目标元素，显示居中的提示框
+      // 如果找不到目标元素，尝试使用备用选择器或跳过
       setTargetRect(null);
-      // 居中显示提示框
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      const tooltipWidth = 320;
-      const tooltipHeight = 200;
-      setTooltipPosition({
-        top: (viewportHeight - tooltipHeight) / 2,
-        left: (viewportWidth - tooltipWidth) / 2,
-        arrowPosition: 'bottom'
-      });
+      setTooltipPosition(null);
     }
   }, [currentStep]);
 
@@ -229,11 +215,8 @@ export function OnboardingGuide({ isActive, onComplete, onSkip }: OnboardingGuid
 
     updateTargetPosition();
 
-    // 使用防抖处理 resize 事件 - 需求: 11.2
-    const debouncedUpdatePosition = debounce(updateTargetPosition, DEFAULT_RESIZE_DEBOUNCE_DELAY);
-    
-    // 监听窗口大小变化（使用防抖）
-    window.addEventListener('resize', debouncedUpdatePosition);
+    // 监听窗口大小变化
+    window.addEventListener('resize', updateTargetPosition);
     window.addEventListener('scroll', updateTargetPosition, true);
 
     // 使用 ResizeObserver 监听目标元素大小变化
@@ -244,8 +227,7 @@ export function OnboardingGuide({ isActive, onComplete, onSkip }: OnboardingGuid
     }
 
     return () => {
-      window.removeEventListener('resize', debouncedUpdatePosition);
-      debouncedUpdatePosition.cancel(); // 清理防抖定时器
+      window.removeEventListener('resize', updateTargetPosition);
       window.removeEventListener('scroll', updateTargetPosition, true);
       if (observerRef.current) {
         observerRef.current.disconnect();

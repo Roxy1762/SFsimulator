@@ -150,24 +150,3 @@
     font-size: 0.9rem;
   }
 }
-
-
-/* ==================== 减少动画偏好支持 ==================== */
-/* 需求: 12.1 - 尊重用户的 prefers-reduced-motion 设置 */
-
-@media (prefers-reduced-motion: reduce) {
-  .toast {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  
-  .toast.exiting {
-    animation: none;
-    opacity: 0;
-  }
-  
-  .toast-close {
-    transition: none;
-  }
-}

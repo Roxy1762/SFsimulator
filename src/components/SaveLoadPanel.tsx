@@ -9,7 +9,6 @@
  */
 
 import { useState, useCallback } from 'react';
-import { createPortal } from 'react-dom';
 import type { GameState } from '../types';
 import { SaveSystem } from '../utils/SaveSystem';
 import './SaveLoadPanel.css';
@@ -120,10 +119,10 @@ export function SaveLoadPanel({ gameState, onImport, disabled }: SaveLoadPanelPr
   }, [importText, onImport, showMessage, handleCloseImport]);
 
   return (
-    <div className="save-load-panel" role="region" aria-label="存档管理面板" tabIndex={0}>
+    <div className="save-load-panel">
       <div className="save-load-header">
         <h3 className="panel-title">
-          <span className="title-icon" aria-hidden="true">💾</span>
+          <span className="title-icon">💾</span>
           存档管理
         </h3>
       </div>
@@ -162,8 +161,8 @@ export function SaveLoadPanel({ gameState, onImport, disabled }: SaveLoadPanelPr
         </div>
       )}
 
-      {/* 导入弹窗 - 使用 Portal 渲染到 body 以避免堆叠上下文问题 */}
-      {isImportModalOpen && createPortal(
+      {/* 导入弹窗 */}
+      {isImportModalOpen && (
         <div className="import-modal-overlay" onClick={handleCloseImport}>
           <div className="import-modal" onClick={(e) => e.stopPropagation()}>
             <div className="import-modal-header">
@@ -209,8 +208,7 @@ export function SaveLoadPanel({ gameState, onImport, disabled }: SaveLoadPanelPr
               </button>
             </div>
           </div>
-        </div>,
-        document.body
+        </div>
       )}
     </div>
   );

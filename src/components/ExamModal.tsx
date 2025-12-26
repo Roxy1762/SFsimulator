@@ -11,7 +11,6 @@
  * 需求: 6.2, 6.3, 16.2, 17.6
  */
 
-import { useEffect } from 'react';
 import type { ExamResult, DimensionType } from '../types';
 import './ExamModal.css';
 
@@ -87,14 +86,6 @@ export function ExamModal({ result, onClose }: ExamModalProps) {
     meetsThreshold,
     thresholdInfo,
   } = result;
-
-  // 模态框打开时锁定背景滚动 - 需求 10.2
-  useEffect(() => {
-    document.body.classList.add('modal-open');
-    return () => {
-      document.body.classList.remove('modal-open');
-    };
-  }, []);
 
   const stabilityDescription = getStabilityDescription(stabilityCoefficient);
   const stabilityClass = getStabilityClass(stabilityCoefficient);

@@ -168,18 +168,18 @@ export function MetricsPanel({ metrics, progress, dimensions, effectiveDimension
   const entropyLevelText = getEntropyLevelText(entropyLevel);
 
   return (
-    <div className="metrics-panel" role="region" aria-label="模型指标面板" tabIndex={0}>
+    <div className="metrics-panel">
       <h3 className="panel-title">模型指标</h3>
       
       {/* 多维度指标 */}
-      <div className="model-metrics" role="group" aria-label="模型性能指标">
+      <div className="model-metrics">
         <MiniBar value={accuracy} max={fitScoreCap} label="准确率" icon="🎯" colorClass="accuracy" />
         <MiniBar value={speed} max={fitScoreCap} label="推理速度" icon="⚡" colorClass="speed" />
         <MiniBar value={creativity} max={fitScoreCap} label="创造力" icon="💡" colorClass="creativity" />
         <MiniBar value={robustness} max={fitScoreCap} label="鲁棒性" icon="🛡️" colorClass="robustness" />
       </div>
       
-      <div className="gauges-container" role="group" aria-label="综合指标">
+      <div className="gauges-container">
         {/* 综合拟合指数 */}
         <CircularGauge
           value={fitScore}
@@ -202,7 +202,7 @@ export function MetricsPanel({ metrics, progress, dimensions, effectiveDimension
       </div>
       
       {/* 熵值状态提示 */}
-      <div className={`entropy-status entropy-status-${entropyLevel}`} role="status" aria-live="polite">
+      <div className={`entropy-status entropy-status-${entropyLevel}`}>
         {entropyLevel === 'safe' && (
           <span>✅ 系统稳定，考核收益 +20%</span>
         )}

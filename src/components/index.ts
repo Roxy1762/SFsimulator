@@ -28,5 +28,3 @@ export { SaveLoadPanel } from './SaveLoadPanel';
 export { TutorialModal } from './TutorialModal';
 export { OnboardingGuide, hasCompletedOnboarding, markOnboardingCompleted, resetOnboarding, ONBOARDING_STEPS } from './OnboardingGuide';
 export type { OnboardingStep } from './OnboardingGuide';
-export { MobileNav } from './MobileNav';
-export type { MobileNavPanel } from './MobileNav';

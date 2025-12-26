@@ -50,22 +50,22 @@ export function TeamPanel({
   const canAffordSalary = currentBudget >= totalSalary;
 
   return (
-    <div className="team-panel" role="region" aria-label="团队管理面板" tabIndex={0}>
+    <div className="team-panel">
       <div className="team-panel-header">
         <h3 className="panel-title">
-          <span className="title-icon" aria-hidden="true">👥</span>
+          <span className="title-icon">👥</span>
           团队管理
         </h3>
-        <div className={`team-count ${isTeamFull ? 'full' : ''}`} aria-label={`团队人数 ${teamSize} 人，最多 ${maxTeamSize} 人`}>
+        <div className={`team-count ${isTeamFull ? 'full' : ''}`}>
           {teamSize} / {maxTeamSize}
         </div>
       </div>
 
       {/* 工资总览 - 需求 25.4, 25.6 */}
       {team.length > 0 && (
-        <div className={`salary-overview ${!canAffordSalary ? 'warning' : ''}`} role="group" aria-label="工资总览">
+        <div className={`salary-overview ${!canAffordSalary ? 'warning' : ''}`}>
           <div className="salary-overview-header">
-            <span className="salary-overview-icon" aria-hidden="true">💰</span>
+            <span className="salary-overview-icon">💰</span>
             <span className="salary-overview-title">工资总览</span>
           </div>
           <div className="salary-overview-content">
@@ -80,7 +80,7 @@ export function TeamPanel({
               <span className="salary-turns">{turnsUntilExam} 回合后</span>
             </div>
             {!canAffordSalary && (
-              <div className="salary-warning" role="alert">
+              <div className="salary-warning">
                 ⚠️ 资金不足以支付工资，考核时可能被迫解雇成员
               </div>
             )}
@@ -89,14 +89,14 @@ export function TeamPanel({
       )}
 
       {/* 当前团队成员 */}
-      <div className="team-section" role="group" aria-label="当前团队成员">
+      <div className="team-section">
         <h4 className="section-title">当前团队</h4>
         {team.length === 0 ? (
           <div className="empty-team">
             暂无团队成员，从候选人池中雇佣吧！
           </div>
         ) : (
-          <div className="team-members-list" role="list">
+          <div className="team-members-list">
             {team.map((member) => (
               <TeamMemberCard
                 key={member.id}
@@ -110,7 +110,7 @@ export function TeamPanel({
       </div>
 
       {/* 候选人池 */}
-      <div className="hiring-section" role="group" aria-label="候选人池">
+      <div className="hiring-section">
         <HiringPool
           candidates={hiringPool}
           currentBudget={currentBudget}
@@ -118,7 +118,7 @@ export function TeamPanel({
           disabled={disabled || isTeamFull}
         />
         {isTeamFull && (
-          <div className="team-full-warning" role="alert">
+          <div className="team-full-warning">
             ⚠️ 团队已满，需解雇成员后才能雇佣新人
           </div>
         )}
