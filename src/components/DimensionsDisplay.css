@@ -612,11 +612,20 @@
   .radar-values {
     grid-template-columns: 1fr;
   }
+  
+  .dimensions-display {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 @media (max-width: 480px) {
   .dimensions-display {
     padding: 0.75rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .dimensions-title {

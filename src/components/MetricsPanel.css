@@ -561,6 +561,9 @@
   .metrics-panel {
     padding: 1rem;
     animation: fadeIn 0.3s ease-out;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .gauges-container {
@@ -691,6 +694,12 @@
   .entropy-status {
     font-size: 0.8rem;
     padding: 0.625rem;
+  }
+  
+  .metrics-panel {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 

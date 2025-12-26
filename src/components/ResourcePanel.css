@@ -413,6 +413,9 @@
   .resource-panel {
     padding: 1rem;
     animation: fadeIn 0.3s ease-out;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .data-items {
@@ -495,6 +498,9 @@
 @media (max-width: 480px) {
   .resource-panel {
     padding: 0.875rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .panel-title {

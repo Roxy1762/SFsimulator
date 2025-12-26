@@ -278,6 +278,9 @@
   .team-panel {
     padding: 1rem;
     animation: fadeIn 0.3s ease-out;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .team-panel-header {
@@ -350,6 +353,9 @@
 @media (max-width: 480px) {
   .team-panel {
     padding: 0.875rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .team-panel .panel-title {

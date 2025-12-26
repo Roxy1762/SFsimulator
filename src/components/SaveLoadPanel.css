@@ -353,6 +353,9 @@
 @media (max-width: 768px) {
   .save-load-panel {
     padding: 0.875rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .save-load-buttons {
@@ -403,6 +406,12 @@
 }
 
 @media (max-width: 480px) {
+  .save-load-panel {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
   .save-load-panel .panel-title {
     font-size: 0.85rem;
   }

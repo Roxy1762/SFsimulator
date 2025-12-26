@@ -431,6 +431,9 @@
     min-height: 200px;
     max-height: 300px;
     animation: fadeIn 0.3s ease-out;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .log-item {
@@ -508,6 +511,9 @@
     padding: 0.875rem;
     min-height: 180px;
     max-height: 250px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .event-log .panel-title {

@@ -359,6 +359,9 @@
 @media (max-width: 480px) {
   .operations-panel {
     padding: 0.875rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .operations-panel .panel-title {

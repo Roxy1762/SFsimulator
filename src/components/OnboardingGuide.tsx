@@ -135,6 +135,10 @@ function calculateTooltipPosition(
   const tooltipWidth = 320;
   const tooltipHeight = 200; // 估计高度
   
+  // 检测是否为移动端（底部导航栏高度约 60px + safe area）
+  const isMobile = window.innerWidth <= 767;
+  const bottomNavHeight = isMobile ? 80 : 0; // 底部导航栏预留空间
+  
   let top = 0;
   let left = 0;
   let arrowPosition = position;
@@ -169,11 +173,11 @@ function calculateTooltipPosition(
     left = viewportWidth - tooltipWidth - padding;
   }
   
-  // 垂直边界调整
+  // 垂直边界调整（考虑底部导航栏）
   if (top < padding) {
     top = padding;
-  } else if (top + tooltipHeight > viewportHeight - padding) {
-    top = viewportHeight - tooltipHeight - padding;
+  } else if (top + tooltipHeight > viewportHeight - padding - bottomNavHeight) {
+    top = viewportHeight - tooltipHeight - padding - bottomNavHeight;
   }
   
   return { top, left, arrowPosition };
