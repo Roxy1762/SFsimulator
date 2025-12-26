@@ -339,3 +339,53 @@
     font-size: 0.65rem;
   }
 }
+
+
+/* ==================== 减少动画偏好支持 ==================== */
+/* 需求: 12.1 - 尊重用户的 prefers-reduced-motion 设置 */
+
+@media (prefers-reduced-motion: reduce) {
+  .title-icon {
+    animation: none;
+  }
+  
+  .reputation-main {
+    transition: none;
+  }
+  
+  .reputation-main:hover {
+    transform: none;
+  }
+  
+  .reputation-icon-wrapper {
+    transition: none;
+  }
+  
+  .reputation-main:hover .reputation-icon-wrapper {
+    transform: none;
+  }
+  
+  .reputation-main.legendary .reputation-icon-wrapper {
+    animation: none;
+  }
+  
+  .reputation-circle-fill {
+    transition: none;
+  }
+  
+  .progress-fill {
+    transition: none;
+  }
+  
+  .reputation-bonus {
+    animation: none;
+  }
+  
+  .side-job-item {
+    transition: none;
+  }
+  
+  .side-job-item.unlocked:hover {
+    transform: none;
+  }
+}

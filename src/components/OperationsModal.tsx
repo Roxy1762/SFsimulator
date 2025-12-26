@@ -9,6 +9,7 @@
  */
 
 import { useState, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import type { GameState, OperationCategory } from '../types';
 import { OPERATION_CATEGORIES } from '../types';
 import { getOperationsByCategory } from '../operations';
@@ -68,14 +69,14 @@ export function OperationsModal({
   const currentCategory = OPERATION_CATEGORIES.find(c => c.id === openCategory);
 
   return (
-    <div className={`operations-modal-container ${gameState.risks.serverMeltdown ? 'meltdown' : ''}`}>
+    <div className={`operations-modal-container operations-modal-trigger ${gameState.risks.serverMeltdown ? 'meltdown' : ''}`} role="region" aria-label="操作面板" tabIndex={0}>
       <h3 className="panel-title">
-        <span className="title-icon">⚡</span>
+        <span className="title-icon" aria-hidden="true">⚡</span>
         可用操作
       </h3>
       
       {/* 类别按钮网格 */}
-      <div className="category-buttons-grid">
+      <div className="category-buttons-grid" role="group" aria-label="操作类别">
         {OPERATION_CATEGORIES.map((category) => {
           const executableCount = getExecutableCount(category.id);
           const totalCount = getOperationsByCategory(category.id).length;
@@ -101,16 +102,19 @@ export function OperationsModal({
         })}
       </div>
 
-      {/* 弹窗遮罩和内容 */}
-      {openCategory && currentCategory && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
+      {/* 弹窗遮罩和内容 - 使用 Portal 渲染到 body 以避免堆叠上下文问题 */}
+      {openCategory && currentCategory && createPortal(
+        <div className="modal-overlay" onClick={handleCloseModal} role="presentation">
           <div 
             className={`modal-content ${openCategory}`}
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
           >
             <div className="modal-header">
-              <span className="modal-icon">{currentCategory.icon}</span>
-              <h4 className="modal-title">{currentCategory.name}</h4>
+              <span className="modal-icon" aria-hidden="true">{currentCategory.icon}</span>
+              <h4 className="modal-title" id="modal-title">{currentCategory.name}</h4>
               <span className="modal-description">{currentCategory.description}</span>
               <button 
                 className="modal-close-btn"
@@ -121,7 +125,7 @@ export function OperationsModal({
               </button>
             </div>
             
-            <div className="modal-body">
+            <div className="modal-body" role="list" aria-label="操作列表">
               {currentOperations.length > 0 ? (
                 <div className="modal-operations">
                   {currentOperations.map((operation) => (
@@ -142,7 +146,8 @@ export function OperationsModal({
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

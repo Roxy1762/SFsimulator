@@ -21,6 +21,7 @@ import { ToastContainer, useToast } from './Toast';
 import { TeamPanel } from './TeamPanel';
 import { SaveLoadPanel } from './SaveLoadPanel';
 import { TutorialModal } from './TutorialModal';
+import { MobileNav, type MobileNavPanel } from './MobileNav';
 import { resetOnboarding } from './OnboardingGuide';
 import { getOperationById } from '../operations';
 import { calculateEffectiveDimensions } from '../engine';
@@ -45,6 +46,9 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
   
   // 控制教程弹窗显示 - 需求 28.1
   const [showTutorialModal, setShowTutorialModal] = useState(false);
+  
+  // 移动端导航栏当前激活面板 - 需求 7.3
+  const [activeMobilePanel, setActiveMobilePanel] = useState<MobileNavPanel>('operations');
   
   // 追踪上一次的游戏状态用于比较变化
   const prevGameStateRef = useRef<GameState | null>(null);
@@ -100,6 +104,8 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
   }
 
   const isGameOver = gameState.gameStatus === 'gameOver';
+  const isVictory = gameState.gameStatus === 'victory';
+  const isGameEnded = isGameOver || isVictory;
   const isMeltdown = gameState.risks.serverMeltdown;
   
   // 计算有效维度值（包含团队加成）- 需求 13.4
@@ -111,7 +117,7 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
    * 处理操作执行
    */
   const handleExecuteOperation = (operationId: string) => {
-    if (isGameOver) {
+    if (isGameEnded) {
       error('游戏已结束，无法执行操作');
       return;
     }
@@ -162,7 +168,7 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
    * 处理雇佣团队成员 - 需求 18.3
    */
   const handleHireMember = useCallback((memberId: string) => {
-    if (isGameOver) {
+    if (isGameEnded) {
       error('游戏已结束，无法雇佣成员');
       return;
     }
@@ -177,13 +183,13 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
     if (member) {
       success(`成功雇佣「${member.name}」`, 2000);
     }
-  }, [gameState, isGameOver, hireMember, error, success]);
+  }, [gameState, isGameEnded, hireMember, error, success]);
 
   /**
    * 处理解雇团队成员 - 需求 18.6
    */
   const handleFireMember = useCallback((memberId: string) => {
-    if (isGameOver) {
+    if (isGameEnded) {
       error('游戏已结束，无法解雇成员');
       return;
     }
@@ -194,7 +200,7 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
       const refund = Math.floor(member.hiringCost * 0.3);
       info(`已解雇「${member.name}」，返还 ${refund} 资金`, 2000);
     }
-  }, [gameState, isGameOver, fireMember, error, info]);
+  }, [gameState, isGameEnded, fireMember, error, info]);
 
   /**
    * 处理导入存档 - 需求 22.4
@@ -210,14 +216,14 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
       {/* Toast 通知 */}
       <ToastContainer toasts={toasts} onRemove={removeToast} />
 
-      {/* 游戏标题 */}
-      <header className="game-header">
+      {/* 游戏标题 - 需求 12.4: ARIA 地标区域 */}
+      <header className="game-header" role="banner" aria-label="游戏标题">
         <h1 className="game-title">
-          <span className="title-icon">🤖</span>
+          <span className="title-icon" aria-hidden="true">🤖</span>
           黑箱：算法飞升
         </h1>
         <p className="game-subtitle">训练终极推荐算法，统治人类注意力</p>
-        <div className="header-buttons">
+        <div className="header-buttons" role="navigation" aria-label="辅助功能">
           {/* 重新引导按钮 - 需求 29.8 */}
           {onRestartOnboarding && (
             <button 
@@ -229,7 +235,7 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
               aria-label="重新启动新手引导"
               title="新手引导"
             >
-              <span className="guide-icon">🎓</span>
+              <span className="guide-icon" aria-hidden="true">🎓</span>
               <span className="guide-text">引导</span>
             </button>
           )}
@@ -240,16 +246,21 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
             aria-label="打开游戏教程"
             title="游戏教程"
           >
-            <span className="help-icon">❓</span>
+            <span className="help-icon" aria-hidden="true">❓</span>
             <span className="help-text">帮助</span>
           </button>
         </div>
       </header>
 
-      {/* 主游戏区域 */}
-      <main className="game-main">
-        {/* 左侧面板：资源和指标 */}
-        <aside className="game-sidebar left-sidebar">
+      {/* 主游戏区域 - 需求 12.4: ARIA 地标区域 */}
+      <main className="game-main" role="main" aria-label="游戏主区域">
+        {/* 左侧面板：资源和指标 - 需求 12.3, 12.4: 键盘导航和 ARIA 地标 */}
+        <aside 
+          className="game-sidebar left-sidebar" 
+          role="complementary" 
+          aria-label="资源和指标面板"
+          tabIndex={0}
+        >
           <ResourcePanel resources={gameState.resources} />
           <MetricsPanel 
             metrics={gameState.metrics} 
@@ -261,18 +272,27 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
           <EquipmentPanel />
         </aside>
 
-        {/* 中间区域：操作面板和回合控制 */}
-        <section className="game-center">
+        {/* 中间区域：操作面板和回合控制 - 需求 12.3: 键盘导航 */}
+        <section 
+          className="game-center" 
+          aria-label="操作控制区域"
+          tabIndex={0}
+        >
           <TurnControl />
           <OperationsModal
             gameState={gameState}
             onExecuteOperation={handleExecuteOperation}
-            disabled={isGameOver || isMeltdown}
+            disabled={isGameEnded || isMeltdown}
           />
         </section>
 
-        {/* 右侧面板：团队、存档和日志 */}
-        <aside className="game-sidebar right-sidebar">
+        {/* 右侧面板：团队、存档和日志 - 需求 12.3, 12.4: 键盘导航和 ARIA 地标 */}
+        <aside 
+          className="game-sidebar right-sidebar" 
+          role="complementary" 
+          aria-label="团队和日志面板"
+          tabIndex={0}
+        >
           {/* 团队管理面板 - 需求 18.5 */}
           <TeamPanel
             team={gameState.team}
@@ -280,7 +300,7 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
             currentBudget={gameState.resources.budget}
             onHire={handleHireMember}
             onFire={handleFireMember}
-            disabled={isGameOver}
+            disabled={isGameEnded}
             turnsUntilExam={gameState.progress.turnsUntilExam}
           />
           {/* 存档管理面板 - 需求 22.2 */}
@@ -302,7 +322,7 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
       )}
 
       {/* 游戏结束弹窗 */}
-      {isGameOver && (
+      {isGameEnded && (
         <GameOverModal 
           gameState={gameState} 
           onRestart={handleRestart} 
@@ -313,6 +333,12 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
       <TutorialModal
         isOpen={showTutorialModal}
         onClose={() => setShowTutorialModal(false)}
+      />
+
+      {/* 移动端底部导航栏 - 需求 7.3 */}
+      <MobileNav
+        activePanel={activeMobilePanel}
+        onPanelChange={setActiveMobilePanel}
       />
     </div>
   );

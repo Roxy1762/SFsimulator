@@ -6,6 +6,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { debounce, DEFAULT_RESIZE_DEBOUNCE_DELAY } from '../utils';
 import './OnboardingGuide.css';
 
 // 本地存储键名
@@ -65,10 +66,10 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     tips: ['考核前确保拟合指数和维度达标', '熵值过高时优先维护']
   },
   {
-    id: 'exam-preview',
+    id: 'turn-info',
     title: '考核预告',
     description: '每5回合进行一次流量考核。考核会根据拟合指数、稳定性和能力维度计算收益。考核失败会扣除资金！',
-    targetSelector: '.exam-preview',
+    targetSelector: '.turn-info',
     position: 'left',
     icon: '🎯',
     tips: ['提前查看考核的维度要求', '平衡发展多个维度']
@@ -203,9 +204,18 @@ export function OnboardingGuide({ isActive, onComplete, onSkip }: OnboardingGuid
       setTargetRect(rect);
       setTooltipPosition(calculateTooltipPosition(rect, currentStep.position));
     } else {
-      // 如果找不到目标元素，尝试使用备用选择器或跳过
+      // 如果找不到目标元素，显示居中的提示框
       setTargetRect(null);
-      setTooltipPosition(null);
+      // 居中显示提示框
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const tooltipWidth = 320;
+      const tooltipHeight = 200;
+      setTooltipPosition({
+        top: (viewportHeight - tooltipHeight) / 2,
+        left: (viewportWidth - tooltipWidth) / 2,
+        arrowPosition: 'bottom'
+      });
     }
   }, [currentStep]);
 
@@ -215,8 +225,11 @@ export function OnboardingGuide({ isActive, onComplete, onSkip }: OnboardingGuid
 
     updateTargetPosition();
 
-    // 监听窗口大小变化
-    window.addEventListener('resize', updateTargetPosition);
+    // 使用防抖处理 resize 事件 - 需求: 11.2
+    const debouncedUpdatePosition = debounce(updateTargetPosition, DEFAULT_RESIZE_DEBOUNCE_DELAY);
+    
+    // 监听窗口大小变化（使用防抖）
+    window.addEventListener('resize', debouncedUpdatePosition);
     window.addEventListener('scroll', updateTargetPosition, true);
 
     // 使用 ResizeObserver 监听目标元素大小变化
@@ -227,7 +240,8 @@ export function OnboardingGuide({ isActive, onComplete, onSkip }: OnboardingGuid
     }
 
     return () => {
-      window.removeEventListener('resize', updateTargetPosition);
+      window.removeEventListener('resize', debouncedUpdatePosition);
+      debouncedUpdatePosition.cancel(); // 清理防抖定时器
       window.removeEventListener('scroll', updateTargetPosition, true);
       if (observerRef.current) {
         observerRef.current.disconnect();

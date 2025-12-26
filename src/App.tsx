@@ -14,6 +14,7 @@ import { GameProvider, useGameState, useGameActions } from './context/GameContex
 import { GameInitializer, GameBoard, TutorialModal, OnboardingGuide, hasCompletedOnboarding } from './components';
 import { GameIntro, hasViewedIntro } from './components/GameIntro';
 import './App.css';
+import './components/TouchOptimization.css';
 
 /**
  * 游戏主内容组件

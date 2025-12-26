@@ -97,7 +97,7 @@ export function ResourcePanel({ resources }: ResourcePanelProps) {
   const dataUsagePercent = dataCapacity > 0 ? Math.min(100, (totalData / dataCapacity) * 100) : 0;
 
   return (
-    <div className="resource-panel">
+    <div className="resource-panel" role="region" aria-label="资源面板" tabIndex={0}>
       <h3 className="panel-title">资源</h3>
       
       {/* 资金 */}
@@ -113,9 +113,9 @@ export function ResourcePanel({ resources }: ResourcePanelProps) {
       <ComputeBar current={computePoints} max={computeMax} />
       
       {/* 数据区域 */}
-      <div className="data-section">
+      <div className="data-section" role="group" aria-label="数据存储">
         <h4 className="data-section-title">数据 ({formatNumber(totalData)} / {formatNumber(dataCapacity)})</h4>
-        <div className="data-capacity-bar">
+        <div className="data-capacity-bar" role="progressbar" aria-valuenow={dataUsagePercent} aria-valuemin={0} aria-valuemax={100} aria-label="数据容量使用率">
           <div 
             className="data-capacity-fill" 
             style={{ width: `${dataUsagePercent}%` }}

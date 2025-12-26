@@ -6,7 +6,43 @@
 
 /* CSS 变量定义 */
 :root {
-  /* 主题色 */
+  /* ==================== 响应式断点系统 ==================== */
+  /* 需求: 2.1 - 响应式断点系统 */
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 1024px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1400px;
+  --breakpoint-xxl: 1600px;
+  
+  /* ==================== 侧边栏宽度系统 ==================== */
+  /* 需求: 4.1, 4.2, 6.1, 6.2 - 侧边栏宽度约束 */
+  --sidebar-min-width: 260px;
+  --sidebar-max-width: 320px;
+  --sidebar-right-min-width: 300px;
+  --sidebar-right-max-width: 380px;
+  
+  /* 中央区域 */
+  /* 需求: 5.2 - 中央区域最小宽度 */
+  --center-min-width: 400px;
+  
+  /* ==================== 间距系统 ==================== */
+  /* 需求: 2.1 - 响应式间距 */
+  --gap-xs: 0.5rem;
+  --gap-sm: 0.75rem;
+  --gap-md: 1rem;
+  --gap-lg: 1.25rem;
+  --gap-xl: 1.5rem;
+  
+  /* ==================== 内边距系统 ==================== */
+  /* 需求: 2.1 - 响应式内边距 */
+  --padding-xs: 0.375rem;
+  --padding-sm: 0.5rem;
+  --padding-md: 0.875rem;
+  --padding-lg: 1rem;
+  --padding-xl: 1.25rem;
+  
+  /* ==================== 主题色 ==================== */
   --color-primary: #4a90d9;
   --color-primary-dark: #2563eb;
   --color-secondary: #667eea;
@@ -528,4 +564,252 @@ button:active:not(:disabled) {
 
 .skip-link:focus {
   top: 0;
+}
+
+
+/* ==================== 低高度视口适配 ==================== */
+/* 需求: 10.4 - 当视口高度 < 700px 时减少面板内边距 */
+
+@media (max-height: 700px) {
+  :root {
+    /* 减少内边距以适应低高度视口 */
+    --padding-xs: 0.25rem;
+    --padding-sm: 0.375rem;
+    --padding-md: 0.625rem;
+    --padding-lg: 0.75rem;
+    --padding-xl: 1rem;
+    
+    /* 减少间距 */
+    --gap-xs: 0.375rem;
+    --gap-sm: 0.5rem;
+    --gap-md: 0.75rem;
+    --gap-lg: 1rem;
+    --gap-xl: 1.25rem;
+  }
+}
+
+/* 极低高度视口 (<600px) */
+@media (max-height: 600px) {
+  :root {
+    /* 进一步减少内边距 */
+    --padding-xs: 0.1875rem;
+    --padding-sm: 0.25rem;
+    --padding-md: 0.5rem;
+    --padding-lg: 0.625rem;
+    --padding-xl: 0.75rem;
+    
+    /* 进一步减少间距 */
+    --gap-xs: 0.25rem;
+    --gap-sm: 0.375rem;
+    --gap-md: 0.5rem;
+    --gap-lg: 0.75rem;
+    --gap-xl: 1rem;
+  }
+}
+
+
+/* ==================== CSS 性能优化 ==================== */
+/* 需求: 11.3 - 使用 CSS will-change 和 contain 属性优化性能 */
+
+/* 面板过渡动画优化 */
+.panel-transition {
+  will-change: transform, opacity;
+}
+
+/* 使用 contain 优化渲染 - 限制重绘范围 */
+.contain-layout {
+  contain: layout;
+}
+
+.contain-style {
+  contain: style;
+}
+
+.contain-layout-style {
+  contain: layout style;
+}
+
+/* 优化过渡动画 - 使用 GPU 加速 */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 减少动画偏好支持 - 需求: 12.1 */
+@media (prefers-reduced-motion: reduce) {
+  .game-main,
+  .panel-transition,
+  .game-sidebar,
+  .game-center {
+    transition: none !important;
+    animation: none !important;
+    will-change: auto !important;
+  }
+}
+
+
+/* ==================== CSS Container Queries 降级支持 ==================== */
+/* 需求: 3.2 - 当 Container Queries 不支持时提供媒体查询后备 */
+
+/* 使用 @supports 检测 Container Queries 支持 */
+@supports not (container-type: inline-size) {
+  /* 
+   * Container Queries 不支持时的媒体查询后备
+   * 使用视口宽度作为近似替代容器宽度
+   * 断点设计基于典型侧边栏宽度场景
+   */
+  
+  /* ==================== 紧凑模式后备 ==================== */
+  /* 当视口宽度较小时，侧边栏面板通常会变窄 */
+  
+  /* 移动端 - 面板全宽但视口窄，模拟紧凑模式 */
+  @media (max-width: 479px) {
+    /* 资源面板紧凑模式后备 */
+    .resource-panel {
+      padding: var(--padding-sm, 0.5rem);
+    }
+    
+    .resource-panel .panel-title {
+      font-size: 0.875rem;
+    }
+    
+    .resource-panel .secondary-info {
+      display: none;
+    }
+    
+    /* 指标面板紧凑模式后备 */
+    .metrics-panel {
+      padding: var(--padding-sm, 0.5rem);
+    }
+    
+    .metrics-panel .panel-title {
+      font-size: 0.875rem;
+    }
+    
+    .metrics-panel .secondary-info {
+      display: none;
+    }
+    
+    /* 操作面板紧凑模式后备 */
+    .operations-panel {
+      padding: var(--padding-sm, 0.5rem);
+    }
+    
+    .operations-panel .panel-title {
+      font-size: 0.875rem;
+    }
+    
+    /* 团队面板紧凑模式后备 */
+    .team-panel {
+      padding: var(--padding-sm, 0.5rem);
+    }
+    
+    .team-panel .panel-title {
+      font-size: 0.875rem;
+    }
+    
+    .team-panel .secondary-info {
+      display: none;
+    }
+    
+    /* 存档面板紧凑模式后备 */
+    .save-load-panel {
+      padding: var(--padding-sm, 0.5rem);
+    }
+    
+    .save-load-panel .panel-title {
+      font-size: 0.875rem;
+    }
+    
+    .save-load-panel .secondary-info {
+      display: none;
+    }
+    
+    /* 事件日志紧凑模式后备 */
+    .event-log {
+      padding: var(--padding-sm, 0.5rem);
+    }
+    
+    .event-log .panel-title {
+      font-size: 0.875rem;
+    }
+    
+    .event-log .secondary-info {
+      display: none;
+    }
+    
+    /* 装备面板紧凑模式后备 */
+    .equipment-panel {
+      padding: var(--padding-sm, 0.5rem);
+    }
+    
+    .equipment-panel .panel-title {
+      font-size: 0.875rem;
+    }
+    
+    .equipment-panel .secondary-info {
+      display: none;
+    }
+  }
+  
+  /* ==================== 标准模式后备 ==================== */
+  /* 平板端 - 两栏布局，侧边栏宽度适中 */
+  @media (min-width: 480px) and (max-width: 1023px) {
+    .resource-panel,
+    .metrics-panel,
+    .operations-panel,
+    .team-panel,
+    .save-load-panel,
+    .event-log,
+    .equipment-panel {
+      padding: var(--padding-md, 0.875rem);
+    }
+    
+    .resource-panel .panel-title,
+    .metrics-panel .panel-title,
+    .operations-panel .panel-title,
+    .team-panel .panel-title,
+    .save-load-panel .panel-title,
+    .event-log .panel-title,
+    .equipment-panel .panel-title {
+      font-size: 0.9375rem;
+    }
+  }
+  
+  /* ==================== 扩展模式后备 ==================== */
+  /* 桌面端 - 三栏布局，侧边栏宽度充足 */
+  @media (min-width: 1024px) {
+    .resource-panel,
+    .metrics-panel,
+    .operations-panel,
+    .team-panel,
+    .save-load-panel,
+    .event-log,
+    .equipment-panel {
+      padding: var(--padding-lg, 1rem);
+    }
+    
+    .resource-panel .panel-title,
+    .metrics-panel .panel-title,
+    .operations-panel .panel-title,
+    .team-panel .panel-title,
+    .save-load-panel .panel-title,
+    .event-log .panel-title,
+    .equipment-panel .panel-title {
+      font-size: 1rem;
+    }
+  }
+  
+  /* 大屏幕 - 侧边栏扩展到最大宽度 */
+  @media (min-width: 1600px) {
+    .resource-panel,
+    .metrics-panel,
+    .operations-panel,
+    .team-panel,
+    .save-load-panel,
+    .event-log,
+    .equipment-panel {
+      padding: var(--padding-xl, 1.25rem);
+    }
+  }
 }

@@ -184,8 +184,11 @@ export class SaveSystem {
       const json = JSON.stringify(saveData);
       
       // 编码为 Base64
-      // 使用 encodeURIComponent 处理 Unicode 字符
-      const base64 = btoa(encodeURIComponent(json));
+      // 使用 TextEncoder 处理 Unicode 字符，避免 btoa 的限制
+      const encoder = new TextEncoder();
+      const uint8Array = encoder.encode(json);
+      const binaryString = Array.from(uint8Array, byte => String.fromCharCode(byte)).join('');
+      const base64 = btoa(binaryString);
       
       return base64;
     } catch (error) {
@@ -218,7 +221,26 @@ export class SaveSystem {
       // 解码 Base64
       let json: string;
       try {
-        json = decodeURIComponent(atob(encoded.trim()));
+        // 清理输入：移除空白字符和换行符
+        const cleanedInput = encoded.trim().replace(/\s/g, '');
+        
+        // 尝试新格式（TextEncoder/TextDecoder）
+        try {
+          const binaryString = atob(cleanedInput);
+          const uint8Array = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            uint8Array[i] = binaryString.charCodeAt(i);
+          }
+          const decoder = new TextDecoder();
+          json = decoder.decode(uint8Array);
+        } catch {
+          // 如果新格式失败，尝试旧格式（encodeURIComponent）
+          try {
+            json = decodeURIComponent(atob(cleanedInput));
+          } catch {
+            throw new Error('Base64解码失败');
+          }
+        }
       } catch {
         return {
           success: false,

@@ -502,3 +502,52 @@
     font-size: 0.875rem;
   }
 }
+
+/* ==================== 减少动画偏好支持 ==================== */
+/* 需求: 12.1 - 尊重用户的 prefers-reduced-motion 设置 */
+
+@media (prefers-reduced-motion: reduce) {
+  .team-member-card {
+    transition: none;
+  }
+  
+  .team-member-card:hover {
+    transform: none;
+  }
+  
+  .team-member-card.legendary {
+    animation: none;
+  }
+  
+  .level-badge {
+    animation: none;
+  }
+  
+  .level-badge.max-level {
+    animation: none;
+  }
+  
+  .exp-bar::before {
+    animation: none;
+  }
+  
+  .exp-bar-fill {
+    transition: none;
+  }
+  
+  .trait-tag {
+    transition: none;
+  }
+  
+  .trait-tag:hover {
+    transform: none;
+  }
+  
+  .fire-button {
+    transition: none;
+  }
+  
+  .fire-button:hover:not(:disabled) {
+    transform: none;
+  }
+}

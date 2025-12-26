@@ -315,3 +315,41 @@
     min-width: 2rem;
   }
 }
+
+
+/* ==================== 减少动画偏好支持 ==================== */
+/* 需求: 12.1 - 尊重用户的 prefers-reduced-motion 设置 */
+
+@media (prefers-reduced-motion: reduce) {
+  .operation-button {
+    transition: none;
+  }
+  
+  .operation-button:hover:not(:disabled) {
+    transform: none;
+  }
+  
+  .operation-button.executing {
+    animation: none;
+  }
+  
+  .operation-button:disabled:active {
+    animation: none;
+  }
+  
+  .operation-icon {
+    transition: none;
+  }
+  
+  .operation-button:hover:not(:disabled) .operation-icon {
+    transform: none;
+  }
+  
+  .operation-button.gamble .operation-icon {
+    animation: none;
+  }
+  
+  .operation-button.gamble:hover:not(:disabled) .operation-icon {
+    animation: none;
+  }
+}

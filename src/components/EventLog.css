@@ -14,6 +14,13 @@
   min-height: 300px;
   max-height: 500px;
   animation: slideInRight 0.4s ease-out 0.1s both;
+  /* Container Query 支持 - 需求: 3.2 */
+  container-type: inline-size;
+  container-name: event-log;
+  /* 动态高度管理 - 需求: 10.2 */
+  overflow: hidden; /* 防止外部溢出，内部滚动由 log-container 处理 */
+  /* CSS 性能优化 - 需求: 11.3 */
+  contain: layout style;
 }
 
 .event-log .panel-title {
@@ -67,18 +74,23 @@
   }
 }
 
-/* 日志容器 - 可滚动 */
+/* 日志容器 - 可滚动 - 需求: 10.2 */
 .log-container {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding-right: 0.5rem;
   scroll-behavior: smooth;
+  /* 优化滚动性能 */
+  overscroll-behavior: contain;
+  /* 最大高度限制 */
+  max-height: calc(100% - 50px); /* 减去标题区域高度 */
 }
 
-/* 自定义滚动条 */
+/* 自定义滚动条 - 优化样式 - 需求: 10.2 */
 .log-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -89,13 +101,23 @@
 }
 
 .log-container::-webkit-scrollbar-thumb {
-  background: #ccc;
+  background: linear-gradient(180deg, #c0c0c0 0%, #a0a0a0 100%);
   border-radius: 3px;
   transition: background 0.3s ease;
 }
 
 .log-container::-webkit-scrollbar-thumb:hover {
-  background: #aaa;
+  background: linear-gradient(180deg, #a0a0a0 0%, #808080 100%);
+}
+
+.log-container::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, #808080 0%, #606060 100%);
+}
+
+/* Firefox 滚动条样式 */
+.log-container {
+  scrollbar-width: thin;
+  scrollbar-color: #b0b0b0 #f0f0f0;
 }
 
 /* 空状态 */
@@ -322,6 +344,79 @@
 }
 
 /* 响应式设计 */
+
+/* 超大屏幕 (>1600px) - 需求: 1.2, 9.1, 9.4 */
+@media (min-width: 1600px) {
+  .event-log {
+    padding: 1.5rem;
+    min-height: 350px;
+    max-height: 550px;
+  }
+  
+  .event-log .panel-title {
+    font-size: 1.125rem;
+    gap: 0.625rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .title-icon {
+    font-size: 1.25rem;
+  }
+  
+  .log-count {
+    font-size: 0.85rem;
+    padding: 0.375rem 0.625rem;
+  }
+  
+  .log-container {
+    gap: 0.625rem;
+  }
+  
+  .empty-icon {
+    font-size: 2.5rem;
+  }
+  
+  .empty-text {
+    font-size: 1rem;
+  }
+  
+  .log-item {
+    padding: 1rem;
+    border-left-width: 4px;
+  }
+  
+  .log-item-header {
+    gap: 0.625rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .log-icon {
+    font-size: 1rem;
+  }
+  
+  .log-message {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .log-details {
+    margin-top: 0.625rem;
+    padding-top: 0.625rem;
+    font-size: 0.9rem;
+  }
+  
+  .log-changes {
+    gap: 0.625rem;
+    margin-top: 0.5rem;
+  }
+  
+  .log-change {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+  }
+}
+
 @media (max-width: 1200px) {
   .event-log {
     padding: 1rem;
@@ -380,5 +475,106 @@
   
   .log-message {
     font-size: 0.75rem;
+  }
+}
+
+
+/* ============================================
+   Container Query 紧凑模式 - 需求: 3.1, 3.3
+   当面板宽度 < 280px 时切换到紧凑布局
+   ============================================ */
+
+/* 紧凑模式 - 容器宽度 < 280px */
+@container event-log (max-width: 280px) {
+  .event-log {
+    padding: var(--padding-sm, 0.5rem);
+    min-height: 180px;
+    max-height: 280px;
+  }
+  
+  .event-log .panel-title {
+    font-size: 0.85rem;
+    gap: 0.375rem;
+    margin-bottom: 0.625rem;
+    padding-bottom: 0.375rem;
+  }
+  
+  .title-icon {
+    font-size: 0.95rem;
+  }
+  
+  .log-count {
+    font-size: 0.65rem;
+    padding: 0.125rem 0.375rem;
+  }
+  
+  .log-container {
+    gap: 0.375rem;
+    padding-right: 0.25rem;
+  }
+  
+  .empty-icon {
+    font-size: 1.5rem;
+  }
+  
+  .empty-text {
+    font-size: 0.8rem;
+  }
+  
+  .log-item {
+    padding: 0.5rem;
+    border-left-width: 2px;
+  }
+  
+  .log-item-header {
+    gap: 0.375rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.65rem;
+  }
+  
+  .log-icon {
+    font-size: 0.75rem;
+  }
+  
+  .log-label {
+    font-size: 0.6rem;
+  }
+  
+  /* 隐藏次要信息 */
+  .log-time {
+    display: none;
+  }
+  
+  .log-details {
+    display: none;
+  }
+  
+  .log-message {
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
+  
+  .log-changes {
+    gap: 0.375rem;
+    margin-top: 0.25rem;
+  }
+  
+  .log-change {
+    padding: 0.0625rem 0.25rem;
+    font-size: 0.65rem;
+  }
+}
+
+/* 标准模式 - 容器宽度 280-320px */
+@container event-log (min-width: 280px) and (max-width: 320px) {
+  .event-log {
+    padding: var(--padding-md, 0.875rem);
+  }
+}
+
+/* 扩展模式 - 容器宽度 > 320px */
+@container event-log (min-width: 320px) {
+  .event-log {
+    padding: var(--padding-lg, 1rem);
   }
 }

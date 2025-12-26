@@ -21,3 +21,11 @@ export {
   type SaveData,
   type ImportResult
 } from './SaveSystem';
+
+// Debounce - 防抖工具函数 (需求: 11.2)
+export {
+  debounce,
+  createResizeHandler,
+  DEFAULT_RESIZE_DEBOUNCE_DELAY,
+  type DebouncedFunction
+} from './debounce';

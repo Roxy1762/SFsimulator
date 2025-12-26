@@ -71,18 +71,18 @@ export function TurnControl() {
   };
 
   return (
-    <div className="turn-control">
+    <div className="turn-control" role="region" aria-label="回合控制" tabIndex={0}>
       {/* 回合状态显示 */}
-      <div className={`turn-status ${isMeltdown ? 'meltdown' : 'normal'}`}>
+      <div className={`turn-status ${isMeltdown ? 'meltdown' : 'normal'}`} role="status" aria-live="polite">
         {isMeltdown ? (
           <>
-            <span className="status-icon">🔥</span>
+            <span className="status-icon" aria-hidden="true">🔥</span>
             <span className="status-text">服务熔断中</span>
             <span className="status-desc">本回合无法执行操作</span>
           </>
         ) : (
           <>
-            <span className="status-icon">✅</span>
+            <span className="status-icon" aria-hidden="true">✅</span>
             <span className="status-text">系统正常</span>
             <span className="status-desc">可以执行操作</span>
           </>
@@ -94,16 +94,17 @@ export function TurnControl() {
         className="end-turn-button"
         onClick={handleEndTurn}
         disabled={isGameOver || isProcessing}
+        aria-label={isProcessing ? '处理中' : `结束回合 ${progress.turn}`}
       >
-        <span className="button-icon">⏭️</span>
+        <span className="button-icon" aria-hidden="true">⏭️</span>
         <span className="button-text">{isProcessing ? '处理中...' : '结束回合'}</span>
         <span className="button-turn">回合 {progress.turn}</span>
       </button>
 
       {/* 考核提醒 */}
       {progress.turnsUntilExam <= 2 && !isGameOver && (
-        <div className="exam-reminder">
-          <span className="reminder-icon">⚠️</span>
+        <div className="exam-reminder" role="alert" aria-live="assertive">
+          <span className="reminder-icon" aria-hidden="true">⚠️</span>
           <span className="reminder-text">
             {progress.turnsUntilExam === 1 
               ? '下回合将进行考核！' 
