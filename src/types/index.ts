@@ -241,7 +241,8 @@ export type TraitType =
   | 'fullstack'             // 全栈开发：所有维度+2
   | 'efficiency'            // 效率达人：每回合+1 AP
   | 'cost_control'          // 成本控制：资金消耗-8%
-  | 'data_mining';          // 数据挖掘：数据获取+15%
+  | 'data_mining'           // 数据挖掘：数据获取+15%
+  | 'tester';               // 测试人员：任意操作有20%概率获得1算力
 
 /**
  * 词条效果配置
@@ -251,6 +252,7 @@ export interface TraitEffects {
   apBonus?: number;
   costReduction?: number;
   dataBonus?: number;
+  apChance?: number;        // 获得额外算力的概率
 }
 
 /**
@@ -305,6 +307,11 @@ export const TRAIT_CONFIGS: Record<TraitType, TraitConfig> = {
     name: '数据挖掘',
     description: '数据获取操作效果+15%',
     effects: { dataBonus: 0.15 }
+  },
+  tester: {
+    name: '测试人员',
+    description: '任意操作有20%概率获得1算力',
+    effects: { apChance: 0.20 }
   }
 };
 
@@ -332,7 +339,51 @@ export interface TeamMember {
   experience: number;           // 当前经验值
   hiringCost: number;           // 雇佣费用
   salary: number;               // 当前工资（随等级增长）
+  isSpecial?: boolean;          // 是否为特殊彩蛋角色
+  specialType?: SpecialCharacterType; // 特殊角色类型
 }
+
+/**
+ * 特殊彩蛋角色类型
+ */
+export type SpecialCharacterType = 'doushatuanzi' | 'guoqiuyi';
+
+/**
+ * 特殊角色配置接口
+ */
+export interface SpecialCharacterConfig {
+  name: string;           // 固定名称
+  dropRate: number;       // 刷新概率
+  traits: TraitType[];    // 固定词条
+  color: string;          // 显示颜色
+  description: string;    // 角色描述
+  baseSalary: number;     // 基础工资
+  baseHiringCost: number; // 基础雇佣费用
+}
+
+/**
+ * 特殊彩蛋角色配置
+ */
+export const SPECIAL_CHARACTER_CONFIGS: Record<SpecialCharacterType, SpecialCharacterConfig> = {
+  doushatuanzi: {
+    name: '豆沙团子',
+    dropRate: 0.07,       // 7%刷新率
+    traits: ['algorithm_expert', 'data_engineer', 'architect', 'product_manager', 'fullstack'], // 5个词条
+    color: '#e91e63',     // 粉红色
+    description: '传说中的全能天才，拥有5个词条的彩蛋角色',
+    baseSalary: 1500,
+    baseHiringCost: 8000
+  },
+  guoqiuyi: {
+    name: '过球衣',
+    dropRate: 0.15,       // 15%刷新率
+    traits: ['tester'],   // 测试人员词条
+    color: '#00bcd4',     // 青色
+    description: '专业测试人员，任意操作有20%概率获得1算力',
+    baseSalary: 400,
+    baseHiringCost: 1800
+  }
+};
 
 // ============ 设备系统类型 ============
 

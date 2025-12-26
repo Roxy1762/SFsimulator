@@ -524,3 +524,89 @@
     font-size: 0.875rem;
   }
 }
+
+
+/* ============ 特殊彩蛋角色样式 ============ */
+
+/* 特殊角色卡片 */
+.team-member-card.special-character {
+  background: linear-gradient(145deg, #fff5f8 0%, #ffe4ec 100%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.team-member-card.special-character::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #e91e63, #ff9800, #00bcd4, #9c27b0);
+  border-radius: 14px;
+  z-index: -1;
+  animation: rainbowBorder 3s linear infinite;
+}
+
+@keyframes rainbowBorder {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* 豆沙团子特殊样式 */
+.team-member-card.special-doushatuanzi {
+  background: linear-gradient(145deg, #fce4ec 0%, #f8bbd9 100%);
+}
+
+.team-member-card.special-doushatuanzi::before {
+  background: linear-gradient(135deg, #e91e63, #f06292, #ec407a, #e91e63);
+}
+
+/* 过球衣特殊样式 */
+.team-member-card.special-guoqiuyi {
+  background: linear-gradient(145deg, #e0f7fa 0%, #b2ebf2 100%);
+}
+
+.team-member-card.special-guoqiuyi::before {
+  background: linear-gradient(135deg, #00bcd4, #26c6da, #00acc1, #00bcd4);
+}
+
+/* 特殊角色名字样式 */
+.member-name.special-name {
+  font-weight: 800;
+  text-shadow: 0 0 8px currentColor;
+  animation: specialNameGlow 2s ease-in-out infinite;
+}
+
+@keyframes specialNameGlow {
+  0%, 100% { 
+    text-shadow: 0 0 8px currentColor;
+  }
+  50% { 
+    text-shadow: 0 0 16px currentColor, 0 0 24px currentColor;
+  }
+}
+
+/* 特殊徽章样式 */
+.rarity-badge.special-badge {
+  background: linear-gradient(135deg, #e91e63 0%, #ff9800 100%);
+  animation: specialBadgeGlow 1.5s ease-in-out infinite;
+  font-weight: 700;
+}
+
+@keyframes specialBadgeGlow {
+  0%, 100% { 
+    box-shadow: 0 2px 8px rgba(233, 30, 99, 0.4);
+  }
+  50% { 
+    box-shadow: 0 2px 16px rgba(233, 30, 99, 0.7), 0 0 24px rgba(255, 152, 0, 0.5);
+  }
+}
+
+/* 测试人员词条样式 */
+.trait-tag.tester {
+  background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+  border-color: #4dd0e1;
+  color: #00838f;
+}

@@ -12,8 +12,9 @@ import type {
   DimensionType,
   RarityType,
   BaseStats,
+  SpecialCharacterType,
 } from '../types';
-import { TRAIT_CONFIGS, DIFFICULTY_CONFIGS, RARITY_CONFIGS } from '../types';
+import { TRAIT_CONFIGS, DIFFICULTY_CONFIGS, RARITY_CONFIGS, SPECIAL_CHARACTER_CONFIGS } from '../types';
 
 // ============ 常量配置 ============
 
@@ -71,7 +72,7 @@ const CANDIDATE_NAMES = [
  */
 const ALL_TRAITS: TraitType[] = [
   'algorithm_expert', 'data_engineer', 'architect', 'product_manager',
-  'fullstack', 'efficiency', 'cost_control', 'data_mining'
+  'fullstack', 'efficiency', 'cost_control', 'data_mining', 'tester'
 ];
 
 // ============ 团队系统类 ============
@@ -141,11 +142,18 @@ export class TeamSystem {
   /**
    * 生成单个团队成员
    * 需求: 18.2, 18.3 - 根据稀有度概率生成成员，根据稀有度决定词条数量
+   * 支持彩蛋特殊角色：豆沙团子(7%)、过球衣(15%)
    * 
    * @param state - 当前游戏状态
    * @returns 新生成的团队成员
    */
   static generateTeamMember(state: GameState): TeamMember {
+    // 首先检查是否生成特殊彩蛋角色
+    const specialCharacter = this.tryGenerateSpecialCharacter(state);
+    if (specialCharacter) {
+      return specialCharacter;
+    }
+    
     // 根据概率决定稀有度
     const rarity = this.determineRarity();
     const rarityConfig = RARITY_CONFIGS[rarity];
@@ -177,6 +185,62 @@ export class TeamSystem {
       experience: 0,
       hiringCost,
       salary,
+    };
+  }
+
+  /**
+   * 尝试生成特殊彩蛋角色
+   * 豆沙团子: 7%概率，5个词条
+   * 过球衣: 15%概率，测试人员词条
+   * 
+   * @param state - 当前游戏状态
+   * @returns 特殊角色或null
+   */
+  static tryGenerateSpecialCharacter(state: GameState): TeamMember | null {
+    const roll = Math.random();
+    
+    // 检查豆沙团子 (7%)
+    if (roll < SPECIAL_CHARACTER_CONFIGS.doushatuanzi.dropRate) {
+      return this.createSpecialCharacter('doushatuanzi', state);
+    }
+    
+    // 检查过球衣 (15%)，概率区间为 7% - 22%
+    if (roll < SPECIAL_CHARACTER_CONFIGS.doushatuanzi.dropRate + SPECIAL_CHARACTER_CONFIGS.guoqiuyi.dropRate) {
+      return this.createSpecialCharacter('guoqiuyi', state);
+    }
+    
+    return null;
+  }
+
+  /**
+   * 创建特殊彩蛋角色
+   * 
+   * @param type - 特殊角色类型
+   * @param state - 当前游戏状态
+   * @returns 特殊角色成员
+   */
+  static createSpecialCharacter(type: SpecialCharacterType, state: GameState): TeamMember {
+    const config = SPECIAL_CHARACTER_CONFIGS[type];
+    const difficultyConfig = DIFFICULTY_CONFIGS[state.difficulty];
+    
+    // 特殊角色使用传说级的基础属性范围
+    const baseStats = this.generateBaseStats('legendary');
+    
+    // 计算雇佣费用
+    const hiringCost = Math.floor(config.baseHiringCost * difficultyConfig.modifiers.hiringCostMultiplier);
+    
+    return {
+      id: this.generateUUID(),
+      name: config.name,
+      rarity: 'legendary', // 特殊角色显示为传说级
+      baseStats,
+      traits: [...config.traits], // 使用配置的固定词条
+      level: 1,
+      experience: 0,
+      hiringCost,
+      salary: config.baseSalary,
+      isSpecial: true,
+      specialType: type,
     };
   }
 

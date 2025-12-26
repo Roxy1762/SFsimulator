@@ -53,6 +53,7 @@ describe('Feature: algorithm-ascension-game - Team System', () => {
   // Property 31: Team Member Rarity and Trait Count (Updated)
   // **Validates: Requirements 18.2, 18.3**
   // *For any* generated team member, the number of traits should match the rarity's trait slots
+  // Special characters have their own trait configurations
   it('Property 31: Team member rarity and trait count - traits match rarity slots', () => {
     fc.assert(
       fc.property(
@@ -66,9 +67,16 @@ describe('Feature: algorithm-ascension-game - Team System', () => {
           const validRarities: RarityType[] = ['common', 'rare', 'epic', 'legendary'];
           expect(validRarities).toContain(member.rarity);
           
-          // Trait count should match rarity's trait slots
-          const expectedTraitCount = RARITY_CONFIGS[member.rarity].traitSlots;
-          expect(member.traits.length).toBe(expectedTraitCount);
+          // Special characters have their own trait configurations
+          if (member.isSpecial) {
+            // Special characters can have more traits than normal
+            expect(member.traits.length).toBeGreaterThan(0);
+            expect(member.traits.length).toBeLessThanOrEqual(5);
+          } else {
+            // Trait count should match rarity's trait slots for normal members
+            const expectedTraitCount = RARITY_CONFIGS[member.rarity].traitSlots;
+            expect(member.traits.length).toBe(expectedTraitCount);
+          }
           
           // All traits should be unique (no duplicates)
           const uniqueTraits = new Set(member.traits);
@@ -77,7 +85,7 @@ describe('Feature: algorithm-ascension-game - Team System', () => {
           // All traits should be valid trait types
           const validTraits: TraitType[] = [
             'algorithm_expert', 'data_engineer', 'architect', 'product_manager',
-            'fullstack', 'efficiency', 'cost_control', 'data_mining'
+            'fullstack', 'efficiency', 'cost_control', 'data_mining', 'tester'
           ];
           for (const trait of member.traits) {
             expect(validTraits).toContain(trait);
@@ -92,8 +100,10 @@ describe('Feature: algorithm-ascension-game - Team System', () => {
           expect(member.baseStats.maintenanceSkill).toBeGreaterThanOrEqual(statRange.min);
           expect(member.baseStats.maintenanceSkill).toBeLessThanOrEqual(statRange.max);
           
-          // Member should have salary matching rarity
-          expect(member.salary).toBe(RARITY_CONFIGS[member.rarity].baseSalary);
+          // Member should have salary matching rarity (or special config for special characters)
+          if (!member.isSpecial) {
+            expect(member.salary).toBe(RARITY_CONFIGS[member.rarity].baseSalary);
+          }
         }
       ),
       { numRuns: 100 }
@@ -104,6 +114,7 @@ describe('Feature: algorithm-ascension-game - Team System', () => {
   // Property 31b: Hiring pool generation
   // **Validates: Requirements 18.1, 18.2, 18.3**
   // *For any* game state, generating a hiring pool should produce exactly 3 candidates with valid rarity
+  // Special characters have their own trait configurations
   it('Property 31b: Hiring pool generation - produces 3 candidates with valid rarity and traits', () => {
     fc.assert(
       fc.property(
@@ -125,9 +136,15 @@ describe('Feature: algorithm-ascension-game - Team System', () => {
             const validRarities: RarityType[] = ['common', 'rare', 'epic', 'legendary'];
             expect(validRarities).toContain(member.rarity);
             
-            // Trait count should match rarity
-            const expectedTraitCount = RARITY_CONFIGS[member.rarity].traitSlots;
-            expect(member.traits.length).toBe(expectedTraitCount);
+            // Special characters have their own trait configurations
+            if (member.isSpecial) {
+              expect(member.traits.length).toBeGreaterThan(0);
+              expect(member.traits.length).toBeLessThanOrEqual(5);
+            } else {
+              // Trait count should match rarity for normal members
+              const expectedTraitCount = RARITY_CONFIGS[member.rarity].traitSlots;
+              expect(member.traits.length).toBe(expectedTraitCount);
+            }
             
             // Base stats should be valid
             expect(member.baseStats).toBeDefined();
@@ -844,5 +861,5 @@ describe('Feature: algorithm-ascension-game - Level Up Trait Acquisition', () =>
 // Export ALL_TRAITS for testing
 const ALL_TRAITS: TraitType[] = [
   'algorithm_expert', 'data_engineer', 'architect', 'product_manager',
-  'fullstack', 'efficiency', 'cost_control', 'data_mining'
+  'fullstack', 'efficiency', 'cost_control', 'data_mining', 'tester'
 ];

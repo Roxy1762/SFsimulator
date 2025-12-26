@@ -7,7 +7,7 @@
 
 import { useState } from 'react';
 import type { TeamMember, TraitType, RarityType } from '../types';
-import { TRAIT_CONFIGS, RARITY_CONFIGS } from '../types';
+import { TRAIT_CONFIGS, RARITY_CONFIGS, SPECIAL_CHARACTER_CONFIGS } from '../types';
 import { EXP_PER_LEVEL } from '../engine/TeamSystem';
 import './TeamMemberCard.css';
 
@@ -45,6 +45,7 @@ function getTraitIcon(trait: TraitType): string {
     efficiency: '⚡',
     cost_control: '💵',
     data_mining: '⛏️',
+    tester: '🧪',
   };
   return icons[trait];
 }
@@ -128,8 +129,13 @@ export function TeamMemberCard({ member, onFire, onRename, showFireButton = true
     }
   };
 
+  // 获取特殊角色配置
+  const specialConfig = member.isSpecial && member.specialType 
+    ? SPECIAL_CHARACTER_CONFIGS[member.specialType] 
+    : null;
+
   return (
-    <div className={`team-member-card rarity-${member.rarity}`}>
+    <div className={`team-member-card rarity-${member.rarity} ${member.isSpecial ? 'special-character' : ''} ${member.specialType ? `special-${member.specialType}` : ''}`}>
       <div className="member-header">
         <div className="member-info">
           {isEditing ? (
@@ -145,19 +151,29 @@ export function TeamMemberCard({ member, onFire, onRename, showFireButton = true
             />
           ) : (
             <span 
-              className={`member-name ${onRename ? 'editable' : ''}`}
-              onClick={handleNameClick}
-              title={onRename ? '点击修改名字' : undefined}
+              className={`member-name ${onRename && !member.isSpecial ? 'editable' : ''} ${member.isSpecial ? 'special-name' : ''}`}
+              onClick={member.isSpecial ? undefined : handleNameClick}
+              title={member.isSpecial ? specialConfig?.description : (onRename ? '点击修改名字' : undefined)}
+              style={member.isSpecial && specialConfig ? { color: specialConfig.color } : undefined}
             >
-              {member.name}
+              {member.isSpecial && '✨'}{member.name}{member.isSpecial && '✨'}
             </span>
           )}
-          <span 
-            className={`rarity-badge rarity-${member.rarity}`}
-            style={{ backgroundColor: rarityConfig.color }}
-          >
-            {rarityConfig.name}
-          </span>
+          {member.isSpecial ? (
+            <span 
+              className="rarity-badge special-badge"
+              style={{ backgroundColor: specialConfig?.color }}
+            >
+              彩蛋
+            </span>
+          ) : (
+            <span 
+              className={`rarity-badge rarity-${member.rarity}`}
+              style={{ backgroundColor: rarityConfig.color }}
+            >
+              {rarityConfig.name}
+            </span>
+          )}
           <span className={`member-level ${member.level >= 10 ? 'max-level' : ''}`}>Lv.{member.level}</span>
         </div>
         {showFireButton && onFire && (

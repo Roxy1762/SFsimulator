@@ -168,6 +168,25 @@ function gameReducer(state: ExtendedGameState, action: GameAction): ExtendedGame
         newGameState = TeamSystem.addExperienceToAll(newGameState, 50);
       }
 
+      // 检查测试人员词条效果：任意操作有20%概率获得1算力
+      let testerBonusAP = 0;
+      const hasTester = newGameState.team.some(member => 
+        member.traits.includes('tester')
+      );
+      if (hasTester && Math.random() < 0.20) {
+        testerBonusAP = 1;
+        newGameState = {
+          ...newGameState,
+          resources: {
+            ...newGameState.resources,
+            computePoints: Math.min(
+              newGameState.resources.computePoints + 1,
+              newGameState.resources.computeMax + 1
+            ),
+          },
+        };
+      }
+
       // 生成操作日志
       let logMessage = `执行了「${operation.name}」`;
       if (operation.effects.isGamble) {
@@ -176,6 +195,9 @@ function gameReducer(state: ExtendedGameState, action: GameAction): ExtendedGame
       }
       if (action.operationId === 'team_training') {
         logMessage += '，所有成员获得 50 经验值';
+      }
+      if (testerBonusAP > 0) {
+        logMessage += ' 🧪测试人员触发：+1算力';
       }
 
       return {
