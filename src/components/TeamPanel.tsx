@@ -18,6 +18,7 @@ interface TeamPanelProps {
   currentBudget: number;
   onHire: (memberId: string) => void;
   onFire: (memberId: string) => void;
+  onRename?: (memberId: string, newName: string) => void;
   disabled?: boolean;
   turnsUntilExam?: number; // 距离下次考核的回合数
 }
@@ -38,6 +39,7 @@ export function TeamPanel({
   currentBudget, 
   onHire, 
   onFire,
+  onRename,
   disabled,
   turnsUntilExam = 5
 }: TeamPanelProps) {
@@ -102,6 +104,7 @@ export function TeamPanel({
                 key={member.id}
                 member={member}
                 onFire={onFire}
+                onRename={onRename}
                 showFireButton={!disabled}
               />
             ))}

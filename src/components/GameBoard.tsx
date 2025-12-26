@@ -37,7 +37,7 @@ interface GameBoardProps {
  */
 export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
   const { gameState, lastExamResult, lastEvent } = useGameState();
-  const { executeOperation, resetGame, hireMember, fireMember, dispatch } = useGameActions();
+  const { executeOperation, resetGame, hireMember, fireMember, renameMember, dispatch } = useGameActions();
   const { toasts, removeToast, success, error, warning, info } = useToast();
   
   // 控制考核弹窗显示
@@ -197,6 +197,19 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
   }, [gameState, isGameOver, fireMember, error, info]);
 
   /**
+   * 处理修改团队成员名字
+   */
+  const handleRenameMember = useCallback((memberId: string, newName: string) => {
+    if (isGameOver) {
+      error('游戏已结束，无法修改名字');
+      return;
+    }
+    
+    renameMember(memberId, newName);
+    success(`成员名字已修改为「${newName}」`, 2000);
+  }, [isGameOver, renameMember, error, success]);
+
+  /**
    * 处理导入存档 - 需求 22.4
    */
   const handleImportSave = useCallback((state: GameState) => {
@@ -280,6 +293,7 @@ export function GameBoard({ onRestartOnboarding }: GameBoardProps = {}) {
             currentBudget={gameState.resources.budget}
             onHire={handleHireMember}
             onFire={handleFireMember}
+            onRename={handleRenameMember}
             disabled={isGameOver}
             turnsUntilExam={gameState.progress.turnsUntilExam}
           />

@@ -5,6 +5,7 @@
  * 需求: 18.5, 18.6, 20.5
  */
 
+import { useState } from 'react';
 import type { TeamMember, TraitType, RarityType } from '../types';
 import { TRAIT_CONFIGS, RARITY_CONFIGS } from '../types';
 import { EXP_PER_LEVEL } from '../engine/TeamSystem';
@@ -13,6 +14,7 @@ import './TeamMemberCard.css';
 interface TeamMemberCardProps {
   member: TeamMember;
   onFire?: (memberId: string) => void;
+  onRename?: (memberId: string, newName: string) => void;
   showFireButton?: boolean;
 }
 
@@ -89,7 +91,10 @@ function getExpToNextLevel(member: TeamMember): string {
 /**
  * TeamMemberCard 组件
  */
-export function TeamMemberCard({ member, onFire, showFireButton = true }: TeamMemberCardProps) {
+export function TeamMemberCard({ member, onFire, onRename, showFireButton = true }: TeamMemberCardProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState(member.name);
+  
   const expProgress = calculateExpProgress(member);
   const expDisplay = getExpToNextLevel(member);
   const rarityConfig = getRarityConfig(member.rarity);
@@ -100,11 +105,53 @@ export function TeamMemberCard({ member, onFire, showFireButton = true }: TeamMe
     }
   };
 
+  const handleNameClick = () => {
+    if (onRename) {
+      setEditName(member.name);
+      setIsEditing(true);
+    }
+  };
+
+  const handleNameSubmit = () => {
+    if (onRename && editName.trim() && editName.trim() !== member.name) {
+      onRename(member.id, editName.trim());
+    }
+    setIsEditing(false);
+  };
+
+  const handleNameKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleNameSubmit();
+    } else if (e.key === 'Escape') {
+      setEditName(member.name);
+      setIsEditing(false);
+    }
+  };
+
   return (
     <div className={`team-member-card rarity-${member.rarity}`}>
       <div className="member-header">
         <div className="member-info">
-          <span className="member-name">{member.name}</span>
+          {isEditing ? (
+            <input
+              type="text"
+              className="member-name-input"
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              onBlur={handleNameSubmit}
+              onKeyDown={handleNameKeyDown}
+              autoFocus
+              maxLength={10}
+            />
+          ) : (
+            <span 
+              className={`member-name ${onRename ? 'editable' : ''}`}
+              onClick={handleNameClick}
+              title={onRename ? '点击修改名字' : undefined}
+            >
+              {member.name}
+            </span>
+          )}
           <span 
             className={`rarity-badge rarity-${member.rarity}`}
             style={{ backgroundColor: rarityConfig.color }}

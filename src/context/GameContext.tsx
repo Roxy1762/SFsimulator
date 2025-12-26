@@ -31,6 +31,7 @@ export type GameAction =
   // 团队系统 actions - 需求: 18.3, 18.6
   | { type: 'HIRE_MEMBER'; memberId: string }
   | { type: 'FIRE_MEMBER'; memberId: string }
+  | { type: 'RENAME_MEMBER'; memberId: string; newName: string }
   // 存档系统 actions - 需求: 22.1, 22.4
   | { type: 'EXPORT_SAVE' }
   | { type: 'IMPORT_SAVE'; saveString: string }
@@ -156,17 +157,25 @@ function gameReducer(state: ExtendedGameState, action: GameAction): ExtendedGame
         };
       }
 
-      const newGameState = GameEngine.executeOperation(
+      let newGameState = GameEngine.executeOperation(
         state.gameState,
         operation,
         action.randomValue
       );
+
+      // 特殊处理：团队培训操作 - 需求 20.6
+      if (action.operationId === 'team_training') {
+        newGameState = TeamSystem.addExperienceToAll(newGameState, 50);
+      }
 
       // 生成操作日志
       let logMessage = `执行了「${operation.name}」`;
       if (operation.effects.isGamble) {
         const succeeded = newGameState.metrics.fitScore > state.gameState.metrics.fitScore;
         logMessage += succeeded ? ' - 成功！' : ' - 失败...';
+      }
+      if (action.operationId === 'team_training') {
+        logMessage += '，所有成员获得 50 经验值';
       }
 
       return {
@@ -480,6 +489,60 @@ function gameReducer(state: ExtendedGameState, action: GameAction): ExtendedGame
       }
     }
 
+    case 'RENAME_MEMBER': {
+      // 修改团队成员名字
+      if (!state.gameState) return state;
+
+      const member = state.gameState.team.find(m => m.id === action.memberId);
+      if (!member) {
+        return {
+          ...state,
+          logs: [...state.logs, {
+            id: generateLogId(),
+            type: 'system',
+            message: '改名失败：成员不存在',
+            turn: state.gameState.progress.turn,
+            timestamp: Date.now(),
+          }],
+        };
+      }
+
+      const oldName = member.name;
+      const newName = action.newName.trim();
+      
+      if (!newName) {
+        return {
+          ...state,
+          logs: [...state.logs, {
+            id: generateLogId(),
+            type: 'system',
+            message: '改名失败：名字不能为空',
+            turn: state.gameState.progress.turn,
+            timestamp: Date.now(),
+          }],
+        };
+      }
+
+      const newGameState: GameState = {
+        ...state.gameState,
+        team: state.gameState.team.map(m => 
+          m.id === action.memberId ? { ...m, name: newName } : m
+        ),
+      };
+
+      return {
+        ...state,
+        gameState: newGameState,
+        logs: [...state.logs, {
+          id: generateLogId(),
+          type: 'system',
+          message: `「${oldName}」已改名为「${newName}」`,
+          turn: state.gameState.progress.turn,
+          timestamp: Date.now(),
+        }],
+      };
+    }
+
     case 'REFRESH_HIRING_POOL': {
       // 需求: 18.1 - 每回合刷新3个候选人
       if (!state.gameState) return state;
@@ -697,6 +760,11 @@ export function useGameActions() {
     dispatch({ type: 'FIRE_MEMBER', memberId });
   }, [dispatch]);
 
+  // 修改团队成员名字
+  const renameMember = useCallback((memberId: string, newName: string) => {
+    dispatch({ type: 'RENAME_MEMBER', memberId, newName });
+  }, [dispatch]);
+
   // 刷新候选人池 - 需求: 18.1
   const refreshHiringPool = useCallback(() => {
     dispatch({ type: 'REFRESH_HIRING_POOL' });
@@ -738,6 +806,7 @@ export function useGameActions() {
     // 团队系统
     hireMember,
     fireMember,
+    renameMember,
     refreshHiringPool,
     // 存档系统
     exportSave,
