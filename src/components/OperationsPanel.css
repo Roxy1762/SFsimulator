@@ -356,20 +356,132 @@
   }
 }
 
-@media (max-width: 480px) {
+/* ==================== iPhone 横屏布局 (480-767px landscape) ==================== */
+/* 需求: 2.1, 2.3, 2.4 - 双列布局，紧凑间距 */
+@media (min-width: 480px) and (max-width: 767px) and (orientation: landscape) {
   .operations-panel {
-    padding: 0.875rem;
+    padding: var(--mobile-padding-xs, 8px);
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
   }
   
   .operations-panel .panel-title {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
+  }
+  
+  .operations-categories {
+    gap: 0.25rem;
+  }
+  
+  .operation-category {
+    margin-bottom: 0.5rem;
+  }
+  
+  .category-header {
+    padding: 0.25rem 0.375rem;
+    margin-bottom: 0.375rem;
+  }
+  
+  .category-icon {
+    font-size: 0.85rem;
+    margin-right: 0.25rem;
+  }
+  
+  .category-title {
+    font-size: 0.7rem;
+  }
+  
+  .category-count {
+    display: none;
   }
   
   .category-operations {
-    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-gap-xs, 4px);
+  }
+  
+  .operations-empty {
+    padding: 0.75rem;
+  }
+  
+  .operations-empty-icon {
+    font-size: 1.25rem;
+  }
+  
+  .operations-empty-text {
+    font-size: 0.75rem;
+  }
+}
+
+/* ==================== iPhone 竖屏布局 (<480px) ==================== */
+/* 需求: 1.1, 5.1, 5.2, 9.2, 9.3 - 按钮自适应换行，紧凑间距 */
+@media (max-width: 479px) {
+  .operations-panel {
+    /* 紧凑内边距 - 需求: 9.2, 9.3 */
+    padding: var(--mobile-padding-xs, 8px);
+    /* 全宽布局 - 需求: 5.1, 5.2 */
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    /* 防止内容溢出 */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .operations-panel .panel-title {
+    font-size: 0.875rem;
+    margin-bottom: 0.625rem;
+    padding-bottom: 0.375rem;
+  }
+  
+  .operations-categories {
+    gap: 0.375rem;
+  }
+  
+  .operation-category {
+    margin-bottom: 0.75rem;
+  }
+  
+  .category-header {
+    padding: 0.375rem 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .category-icon {
+    font-size: 0.95rem;
+    margin-right: 0.375rem;
+  }
+  
+  .category-title {
+    font-size: 0.75rem;
+  }
+  
+  /* 隐藏操作数量徽章以节省空间 */
+  .category-count {
+    display: none;
+  }
+  
+  /* 按钮自适应换行 - 需求: 6.3 */
+  .category-operations {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-gap-sm, 8px);
+  }
+  
+  .operations-empty {
+    padding: 1rem;
+  }
+  
+  .operations-empty-icon {
+    font-size: 1.5rem;
+  }
+  
+  .operations-empty-text {
+    font-size: 0.8rem;
   }
 }
 

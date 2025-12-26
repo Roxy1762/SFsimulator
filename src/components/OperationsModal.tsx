@@ -58,6 +58,18 @@ export function OperationsModal({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [openCategory, handleCloseModal]);
 
+  // 模态框打开时锁定背景滚动 - 需求 10.2
+  useEffect(() => {
+    if (openCategory) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [openCategory]);
+
   // 获取类别的可执行操作数量
   const getExecutableCount = (categoryId: OperationCategory) => {
     const operations = getOperationsByCategory(categoryId);

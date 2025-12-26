@@ -412,16 +412,27 @@
   transform: scale(1.2);
 }
 
-/* ==================== 响应式设计 ==================== */
+/* ==================== 响应式设计 - 移动端优化 ==================== */
+/* Requirements: 8.1, 8.3, 8.4 */
 
+/* 平板和小屏幕 */
 @media (max-width: 768px) {
   .tutorial-modal-overlay {
-    padding: 0.5rem;
+    padding: var(--mobile-padding-sm, 12px);
   }
 
   .tutorial-modal {
-    max-height: 95vh;
+    width: 95%;
+    max-width: 95vw;
+    max-height: calc(100vh - 60px);
+    max-height: calc(100dvh - 60px);
     border-radius: 16px;
+    overflow: hidden;
+  }
+  
+  .tutorial-content {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .tutorial-header {
@@ -431,6 +442,15 @@
   .tutorial-header h2 {
     font-size: 1.25rem;
   }
+  
+  /* 关闭按钮触摸优化 - 需求 8.4 */
+  .tutorial-close-button {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+  }
 
   .tutorial-nav {
     padding: 0.5rem;
@@ -438,6 +458,8 @@
 
   .tutorial-nav-item {
     padding: 0.5rem 0.75rem;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .nav-title {
@@ -485,17 +507,42 @@
     padding: 0.75rem 1rem;
   }
 
+  /* 导航按钮触摸优化 - 需求 8.4 */
   .tutorial-nav-button {
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .tutorial-nav-button span:not(.nav-arrow) {
     display: none;
   }
+  
+  /* 分页点触摸优化 */
+  .pagination-dot {
+    width: 12px;
+    height: 12px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 16px;
+    background-clip: content-box;
+  }
 }
 
+/* 小屏手机 */
 @media (max-width: 480px) {
+  .tutorial-modal-overlay {
+    padding: var(--mobile-padding-xs, 8px);
+  }
+  
+  .tutorial-modal {
+    width: 95%;
+    max-width: 95vw;
+    max-height: calc(100vh - 40px);
+    max-height: calc(100dvh - 40px);
+  }
+  
   .tutorial-header {
     padding: 0.875rem;
   }
@@ -509,8 +556,10 @@
   }
 
   .tutorial-close-button {
-    width: 32px;
-    height: 32px;
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
     font-size: 1rem;
   }
 
@@ -527,8 +576,17 @@
   }
 
   .pagination-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
+  }
+  
+  /* 导航项紧凑布局 */
+  .tutorial-nav-item {
+    padding: 0.4rem 0.6rem;
+  }
+  
+  .nav-icon {
+    font-size: 1.1rem;
   }
 }
 

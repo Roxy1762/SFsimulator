@@ -9,6 +9,7 @@
  * 需求: 1.4
  */
 
+import { useEffect } from 'react';
 import type { GameState } from '../types';
 import { ENDING_CONFIGS, DIFFICULTY_CONFIGS } from '../types';
 import './GameOverModal.css';
@@ -89,6 +90,14 @@ export function GameOverModal({ gameState, onRestart }: GameOverModalProps) {
     team,
     gameStatus,
   } = gameState;
+
+  // 模态框打开时锁定背景滚动 - 需求 10.2
+  useEffect(() => {
+    document.body.classList.add('modal-open');
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, []);
 
   // 获取结局配置
   const ending = endingType ? ENDING_CONFIGS[endingType] : null;

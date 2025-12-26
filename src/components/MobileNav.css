@@ -2,6 +2,7 @@
  * MobileNav 组件样式
  * 移动端底部导航栏
  * 需求: 7.3 - 底部导航栏快速切换面板
+ * 需求: 7.4 - 导航栏不遮挡内容
  */
 
 /* 底部导航栏容器 */
@@ -15,17 +16,36 @@
   align-items: center;
   background: rgba(26, 26, 46, 0.98);
   backdrop-filter: blur(10px);
-  padding: var(--padding-xs) 0;
-  padding-bottom: calc(var(--padding-xs) + env(safe-area-inset-bottom, 0px));
+  -webkit-backdrop-filter: blur(10px);
+  /* 基础高度 60px + 安全区域 padding - 需求: 7.3 */
+  height: 60px;
+  padding: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
   box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.3);
-  z-index: 950;
+  /* z-index 高于其他内容但低于模态框 - 需求: 7.3 */
+  z-index: 1000;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  /* 确保导航栏不被其他元素遮挡 */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* 移动端显示导航栏 */
 @media (max-width: 767px) {
   .mobile-nav {
     display: flex;
+    /* 总高度 = 60px + safe-area-inset-bottom */
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* iPad 竖屏也显示导航栏 */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .mobile-nav {
+    display: flex;
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -35,7 +55,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--padding-xs) var(--padding-sm);
+  padding: var(--mobile-padding-xs, 8px) var(--mobile-padding-sm, 12px);
+  /* 触摸目标最小尺寸 44px - 需求: 6.1 */
   min-width: 60px;
   min-height: 44px;
   background: transparent;
@@ -47,6 +68,8 @@
   cursor: pointer;
   transition: all 0.2s ease;
   -webkit-tap-highlight-color: transparent;
+  /* 确保触摸区域足够大 */
+  touch-action: manipulation;
 }
 
 .mobile-nav-item:hover {
@@ -87,12 +110,15 @@
 /* 小屏手机优化 */
 @media (max-width: 479px) {
   .mobile-nav {
-    padding: var(--padding-xs) 0;
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    height: calc(56px + env(safe-area-inset-bottom, 0px));
   }
   
   .mobile-nav-item {
     min-width: 50px;
-    padding: var(--padding-xs);
+    min-height: 44px;
+    padding: var(--mobile-padding-xs, 8px);
   }
   
   .mobile-nav-icon {
@@ -102,6 +128,30 @@
   .mobile-nav-label {
     font-size: 0.6rem;
     max-width: 50px;
+  }
+}
+
+/* iPhone 横屏优化 */
+@media (min-width: 480px) and (max-width: 767px) and (orientation: landscape) {
+  .mobile-nav {
+    height: calc(50px + env(safe-area-inset-bottom, 0px));
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  
+  .mobile-nav-item {
+    min-width: 50px;
+    min-height: 40px;
+    padding: 4px 8px;
+  }
+  
+  .mobile-nav-icon {
+    font-size: 1rem;
+    margin-bottom: 1px;
+  }
+  
+  .mobile-nav-label {
+    font-size: 0.55rem;
   }
 }
 

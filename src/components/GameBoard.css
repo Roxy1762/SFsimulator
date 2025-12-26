@@ -5,10 +5,19 @@
  */
 
 .game-board {
+  /* iOS Safari 100vh 问题修复 - 需求: 12.1 */
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   padding: 1rem;
   animation: boardFadeIn 0.6s ease-out;
+}
+
+/* iOS Safari 100dvh 支持 - 需求: 12.1 */
+@supports (min-height: 100dvh) {
+  .game-board {
+    min-height: 100dvh;
+  }
 }
 
 @keyframes boardFadeIn {
@@ -426,7 +435,306 @@
   }
 }
 
-/* 响应式布局 - 平板 (768-1024px) - 需求: 8.1, 8.2, 8.3 */
+/* ==================== iPad 横屏布局 (>=1024px landscape) ==================== */
+/* 需求: 4.1, 4.2, 4.3 - iPad 横屏三列布局 */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .game-board {
+    /* 减少垂直内边距以适应横屏 - 需求: 4.3 */
+    padding: var(--mobile-padding-sm);
+    padding-top: calc(var(--mobile-padding-sm) + var(--safe-area-top));
+    padding-bottom: calc(var(--mobile-padding-sm) + var(--safe-area-bottom));
+    padding-left: calc(var(--mobile-padding-sm) + var(--safe-area-left));
+    padding-right: calc(var(--mobile-padding-sm) + var(--safe-area-right));
+    /* 防止水平溢出 */
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+  
+  .game-header {
+    /* 减少头部内边距 - 需求: 4.3 */
+    padding: var(--mobile-padding-xs);
+    margin-bottom: var(--mobile-gap-sm);
+  }
+  
+  /* 三列网格布局 (25% 50% 25%) - 需求: 4.1, 4.2 */
+  .game-main {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    grid-template-rows: auto;
+    grid-template-areas: "left center right";
+    gap: var(--mobile-gap-md);
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* 左侧边栏 - 需求: 4.1 */
+  .left-sidebar {
+    grid-area: left;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-gap-sm);
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    width: 100%;
+    max-width: 100%;
+    animation: none;
+  }
+  
+  /* 中央区域 - 需求: 4.1 */
+  .game-center {
+    grid-area: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-gap-sm);
+    width: 100%;
+    max-width: 100%;
+    animation: none;
+  }
+  
+  /* 右侧边栏 - 需求: 4.1 */
+  .right-sidebar {
+    grid-area: right;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-gap-sm);
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    width: 100%;
+    max-width: 100%;
+    animation: none;
+  }
+  
+  /* 所有面板全宽且不超出容器 */
+  .game-board .resource-panel,
+  .game-board .metrics-panel,
+  .game-board .dimensions-display,
+  .game-board .operations-panel,
+  .game-board .turn-control,
+  .game-board .team-panel,
+  .game-board .save-load-panel,
+  .game-board .event-log,
+  .game-board .equipment-panel {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* 防止子元素撑开容器 */
+  .game-board .resource-panel > *,
+  .game-board .metrics-panel > *,
+  .game-board .dimensions-display > *,
+  .game-board .operations-panel > *,
+  .game-board .turn-control > *,
+  .game-board .team-panel > *,
+  .game-board .save-load-panel > *,
+  .game-board .event-log > *,
+  .game-board .equipment-panel > * {
+    max-width: 100%;
+  }
+  
+  /* 横屏标题调整 */
+  .game-title {
+    font-size: 1.5rem;
+  }
+  
+  .title-icon {
+    font-size: 1.75rem;
+  }
+  
+  .game-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  /* 帮助按钮横屏调整 */
+  .header-buttons {
+    gap: var(--gap-xs);
+  }
+  
+  .help-button,
+  .guide-button {
+    padding: var(--padding-sm) var(--padding-md);
+    font-size: 0.85rem;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  /* 侧边栏面板高度限制 */
+  .left-sidebar .metrics-panel {
+    max-height: 350px;
+    overflow-y: auto;
+  }
+  
+  .right-sidebar .team-panel {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .right-sidebar .event-log {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+}
+
+/* ==================== iPad 竖屏布局 (768-1023px portrait) ==================== */
+/* 需求: 3.1, 3.2, 3.3, 3.4, 3.5, 5.4 - iPad 竖屏双列网格布局 */
+@media (max-width: 1023px) and (min-width: 768px) and (orientation: portrait) {
+  .game-board {
+    padding: var(--mobile-padding-sm);
+    /* 安全区域 padding */
+    padding-top: calc(var(--mobile-padding-sm) + var(--safe-area-top));
+    /* 为底部导航栏留出空间 - 需求: 7.3, 7.4 */
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    /* 防止水平溢出 */
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+  
+  .game-header {
+    padding: var(--mobile-padding-sm);
+    margin-bottom: var(--mobile-gap-md);
+  }
+  
+  /* 双列网格布局 - 需求: 3.1 */
+  .game-main {
+    display: grid;
+    /* 使用 minmax(0, 1fr) 防止网格溢出 - 需求: 3.5, 5.4 */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "left center"
+      "bottom bottom";
+    gap: var(--mobile-gap-md);
+    padding: 0;
+    /* 确保内容不溢出 */
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* 左列 - 资源和指标面板 - 需求: 3.2 */
+  .left-sidebar {
+    grid-area: left;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-gap-sm);
+    max-height: none;
+    overflow-y: visible;
+    width: 100%;
+    max-width: 100%;
+    animation: none;
+  }
+  
+  /* 右列 - 操作面板 - 需求: 3.3 */
+  .game-center {
+    grid-area: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-gap-sm);
+    width: 100%;
+    max-width: 100%;
+    animation: none;
+  }
+  
+  /* 底部 - 团队、存档、事件日志 - 需求: 3.4 */
+  .right-sidebar {
+    grid-area: bottom;
+    display: grid;
+    /* 使用 minmax(0, 1fr) 防止网格溢出 - 需求: 3.5, 5.4 */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--mobile-gap-sm);
+    max-height: none;
+    overflow-y: visible;
+    width: 100%;
+    max-width: 100%;
+    animation: none;
+  }
+  
+  /* 事件日志跨两列 */
+  .right-sidebar .event-log {
+    grid-column: 1 / -1;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  /* 团队面板高度限制 */
+  .right-sidebar .team-panel {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  
+  /* 存档面板高度限制 */
+  .right-sidebar .save-load-panel {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  
+  /* 所有面板全宽且不超出容器 - 需求: 3.5, 5.4 */
+  .game-board .resource-panel,
+  .game-board .metrics-panel,
+  .game-board .dimensions-display,
+  .game-board .operations-panel,
+  .game-board .turn-control,
+  .game-board .team-panel,
+  .game-board .save-load-panel,
+  .game-board .event-log,
+  .game-board .equipment-panel {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+    /* 防止内容溢出 - 需求: 3.5, 5.4 */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* 防止子元素撑开容器 - 需求: 3.5, 5.4 */
+  .game-board .resource-panel > *,
+  .game-board .metrics-panel > *,
+  .game-board .dimensions-display > *,
+  .game-board .operations-panel > *,
+  .game-board .turn-control > *,
+  .game-board .team-panel > *,
+  .game-board .save-load-panel > *,
+  .game-board .event-log > *,
+  .game-board .equipment-panel > * {
+    max-width: 100%;
+  }
+  
+  /* 平板端标题调整 */
+  .game-title {
+    font-size: 1.5rem;
+  }
+  
+  .title-icon {
+    font-size: 1.75rem;
+  }
+  
+  .game-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  /* 帮助按钮平板端调整 */
+  .header-buttons {
+    gap: var(--gap-xs);
+  }
+  
+  .help-button,
+  .guide-button {
+    padding: var(--padding-sm) var(--padding-md);
+    font-size: 0.85rem;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+}
+
+/* iPad 竖屏通用布局后备 (无 orientation 支持时) */
 @media (max-width: 1023px) and (min-width: 768px) {
   .game-board {
     padding: var(--padding-sm);
@@ -438,10 +746,13 @@
   }
   
   .game-main {
-    /* 单栏布局，垂直堆叠所有区域 - 更适合iPad竖屏 */
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-template-areas: none;
+    /* 双列网格布局 */
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "left center"
+      "bottom bottom";
     gap: var(--gap-md);
     padding: 0;
     /* 确保内容不溢出 */
@@ -452,31 +763,36 @@
   
   /* 左侧边栏 - 资源和指标面板 */
   .left-sidebar {
-    grid-area: unset;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-area: left;
+    display: flex;
+    flex-direction: column;
     gap: var(--gap-sm);
     max-height: none;
     overflow-y: visible;
     width: 100%;
+    max-width: 100%;
   }
   
   /* 中央区域 - 操作面板 */
   .game-center {
-    grid-area: unset;
+    grid-area: center;
+    display: flex;
+    flex-direction: column;
     gap: var(--gap-sm);
     width: 100%;
+    max-width: 100%;
   }
   
   /* 右侧边栏 - 团队、存档、事件日志 */
   .right-sidebar {
-    grid-area: unset;
+    grid-area: bottom;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--gap-sm);
     max-height: none;
     overflow-y: visible;
     width: 100%;
+    max-width: 100%;
   }
   
   /* 事件日志跨两列 */
@@ -595,8 +911,9 @@
   .game-board {
     /* 减少内边距 - 需求: 7.1 */
     padding: var(--padding-xs);
-    /* 为底部导航栏留出空间 - 需求: 7.3 */
-    padding-bottom: 70px;
+    /* 为底部导航栏留出空间 - 需求: 7.3, 7.4 */
+    /* 导航栏高度 60px + 安全区域 */
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
     /* 防止水平溢出 */
     overflow-x: hidden;
     width: 100%;
@@ -722,51 +1039,117 @@
   }
 }
 
-/* 小屏手机 (<480px) - 需求: 7.1 */
-@media (max-width: 479px) {
+/* ==================== iPhone 横屏布局 (480-767px landscape) ==================== */
+/* 需求: 2.1, 2.4 - iPhone 横屏双列布局 */
+@media (min-width: 480px) and (max-width: 767px) and (orientation: landscape) {
   .game-board {
-    padding: var(--padding-xs);
-    /* 为底部导航栏留出空间 */
-    padding-bottom: 65px;
+    /* 使用移动端内边距变量 */
+    padding: var(--mobile-padding-xs);
+    /* 处理左右安全区域 - 需求: 2.4 */
+    padding-left: calc(var(--mobile-padding-xs) + var(--safe-area-left));
+    padding-right: calc(var(--mobile-padding-xs) + var(--safe-area-right));
+    /* 为底部导航栏和 Home Indicator 留出空间 */
+    padding-bottom: calc(60px + var(--safe-area-bottom));
+    /* 防止水平溢出 */
     overflow-x: hidden;
     width: 100%;
     max-width: 100vw;
+    /* iOS Safari 100vh 修复 */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-height: 100dvh;
   }
   
+  /* 横屏头部更紧凑 - 需求: 2.3 */
   .game-header {
-    padding: var(--padding-xs);
-    margin: calc(-1 * var(--padding-xs));
-    margin-bottom: var(--gap-xs);
-    width: calc(100% + 2 * var(--padding-xs));
+    padding: var(--mobile-padding-xs);
+    margin-bottom: var(--mobile-gap-xs);
   }
   
+  /* 横屏标题缩小 - 需求: 2.3 */
   .game-title {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   
   .title-icon {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
   
+  /* 横屏隐藏副标题 - 需求: 2.3 */
+  .game-subtitle {
+    display: none;
+  }
+  
+  /* 双列网格布局 - 需求: 2.1 */
   .game-main {
-    gap: var(--gap-xs);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "left center"
+      "right right";
+    gap: var(--mobile-gap-sm);
     width: 100%;
     max-width: 100%;
+    padding: 0;
+    overflow-x: hidden;
   }
   
-  .game-sidebar {
-    gap: var(--gap-xs);
+  /* 左侧边栏 - 资源和指标 */
+  .left-sidebar {
+    grid-area: left;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-gap-sm);
+    max-height: calc(100vh - 140px);
+    max-height: calc(100dvh - 140px);
+    overflow-y: auto;
+    width: 100%;
+    animation: none;
   }
   
-  .left-sidebar,
-  .game-center,
+  /* 中央区域 - 操作面板 */
+  .game-center {
+    grid-area: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-gap-sm);
+    width: 100%;
+    animation: none;
+  }
+  
+  /* 右侧边栏 - 团队、存档、日志横向排列 */
   .right-sidebar {
-    gap: var(--gap-xs);
+    grid-area: right;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--mobile-gap-sm);
+    max-height: none;
+    overflow-y: visible;
     width: 100%;
-    max-width: 100%;
+    animation: none;
   }
   
-  /* 更紧凑的面板样式 */
+  /* 事件日志在横屏时不跨列 */
+  .right-sidebar .event-log {
+    grid-column: auto;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  /* 团队面板横屏优化 */
+  .right-sidebar .team-panel {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  /* 存档面板横屏优化 */
+  .right-sidebar .save-load-panel {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  /* 所有面板全宽 */
   .game-board .resource-panel,
   .game-board .metrics-panel,
   .game-board .dimensions-display,
@@ -782,10 +1165,147 @@
     box-sizing: border-box;
   }
   
+  /* 帮助按钮横屏紧凑 - 需求: 2.3 */
+  .header-buttons {
+    position: static;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--mobile-gap-xs);
+    gap: var(--mobile-gap-xs);
+  }
+  
+  .help-button,
+  .guide-button {
+    padding: var(--mobile-padding-xs);
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .help-text,
+  .guide-text {
+    display: none;
+  }
+  
+  .help-icon,
+  .guide-icon {
+    font-size: 1rem;
+  }
+}
+
+/* ==================== iPhone 竖屏布局 (<480px) ==================== */
+/* 需求: 1.1, 1.2, 1.3, 1.4, 1.5 - iPhone 竖屏单列布局 */
+@media (max-width: 479px) {
+  .game-board {
+    /* 使用移动端内边距变量 - 需求: 9.2, 9.3 */
+    padding: var(--mobile-padding-xs);
+    /* 安全区域 padding - 需求: 1.3 */
+    padding-top: calc(var(--mobile-padding-xs) + var(--safe-area-top));
+    padding-left: calc(var(--mobile-padding-xs) + var(--safe-area-left));
+    padding-right: calc(var(--mobile-padding-xs) + var(--safe-area-right));
+    /* 为底部导航栏和 Home Indicator 留出空间 - 需求: 7.3, 7.4 */
+    padding-bottom: calc(70px + var(--safe-area-bottom));
+    /* 防止水平溢出 - 需求: 1.2, 1.4 */
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    /* iOS Safari 100vh 修复 - 需求: 12.1 */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-height: 100dvh;
+  }
+  
+  .game-header {
+    padding: var(--mobile-padding-xs);
+    margin: calc(-1 * var(--mobile-padding-xs));
+    margin-bottom: var(--mobile-gap-sm);
+    width: calc(100% + 2 * var(--mobile-padding-xs));
+  }
+  
+  .game-title {
+    font-size: 1.1rem;
+  }
+  
+  .title-icon {
+    font-size: 1.25rem;
+  }
+  
+  /* 单列布局 - 需求: 1.1 */
+  .game-main {
+    display: flex;
+    flex-direction: column;
+    /* 面板间距 8px - 需求: 1.5 */
+    gap: var(--mobile-gap-sm);
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    /* 防止水平溢出 - 需求: 1.2, 1.4 */
+    overflow-x: hidden;
+  }
+  
+  .game-sidebar {
+    gap: var(--mobile-gap-sm);
+  }
+  
+  /* 所有区域全宽单列 - 需求: 1.1 */
+  .left-sidebar,
+  .game-center,
+  .right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mobile-gap-sm);
+    width: 100%;
+    max-width: 100%;
+    /* 移除动画以提升性能 */
+    animation: none;
+    /* 移除高度限制 */
+    max-height: none;
+    overflow-y: visible;
+  }
+  
+  .left-sidebar {
+    order: 1;
+  }
+  
+  .game-center {
+    order: 2;
+  }
+  
+  .right-sidebar {
+    order: 3;
+  }
+  
+  .right-sidebar > * {
+    flex: none;
+    min-width: auto;
+    width: 100%;
+  }
+  
+  /* 所有面板全宽 - 需求: 1.1, 5.1, 5.2 */
+  .game-board .resource-panel,
+  .game-board .metrics-panel,
+  .game-board .dimensions-display,
+  .game-board .operations-panel,
+  .game-board .turn-control,
+  .game-board .team-panel,
+  .game-board .save-load-panel,
+  .game-board .event-log,
+  .game-board .equipment-panel {
+    border-radius: 6px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    /* 防止内容溢出 - 需求: 5.3 */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
   /* 帮助按钮更紧凑 */
   .help-button,
   .guide-button {
-    padding: var(--padding-xs);
+    padding: var(--mobile-padding-xs);
     min-width: 40px;
     min-height: 40px;
   }

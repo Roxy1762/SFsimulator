@@ -15,6 +15,52 @@
   --breakpoint-xl: 1400px;
   --breakpoint-xxl: 1600px;
   
+  /* ==================== 移动端断点系统 ==================== */
+  /* 需求: 1.5, 6.1, 6.2 - 移动端布局支持 */
+  --mobile-xs: 320px;
+  --mobile-sm: 375px;
+  --mobile-md: 414px;
+  --mobile-lg: 480px;
+  --tablet-sm: 768px;
+  --tablet-md: 834px;
+  --tablet-lg: 1024px;
+  
+  /* ==================== 安全区域变量 ==================== */
+  /* 需求: 1.3, 2.4, 7.3 - 刘海屏和 Home Indicator 安全区域 */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  
+  /* ==================== 移动端间距变量 ==================== */
+  /* 需求: 1.5, 9.2, 9.3 - 移动端紧凑间距 */
+  --mobile-gap-xs: 4px;
+  --mobile-gap-sm: 8px;
+  --mobile-gap-md: 12px;
+  --mobile-gap-lg: 16px;
+  
+  /* ==================== 移动端内边距变量 ==================== */
+  /* 需求: 9.2, 9.3 - 移动端紧凑内边距 */
+  --mobile-padding-xs: 8px;
+  --mobile-padding-sm: 12px;
+  --mobile-padding-md: 16px;
+  
+  /* ==================== 触摸目标变量 ==================== */
+  /* 需求: 6.1, 6.2 - 触摸目标最小尺寸和间距 */
+  --touch-target-min: 44px;
+  --touch-target-spacing: 8px;
+  
+  /* ==================== 移动端字体变量 ==================== */
+  /* 需求: 9.1, 9.4 - 移动端字体最小尺寸和行高 */
+  --mobile-font-min: 14px;
+  --mobile-font-body: 14px;
+  --mobile-font-small: 12px;
+  --mobile-font-h1: 1.5rem;
+  --mobile-font-h2: 1.25rem;
+  --mobile-font-h3: 1.1rem;
+  --mobile-line-height: 1.4;
+  --mobile-line-height-tight: 1.3;
+  
   /* ==================== 侧边栏宽度系统 ==================== */
   /* 需求: 4.1, 4.2, 6.1, 6.2 - 侧边栏宽度约束 */
   --sidebar-min-width: 260px;
@@ -89,11 +135,23 @@
 html, body {
   margin: 0;
   padding: 0;
+  /* iOS Safari 100vh 问题修复 - 需求: 12.1 */
   min-height: 100vh;
-  /* 防止水平溢出 */
+  min-height: -webkit-fill-available;
+  /* 防止水平溢出 - 需求: 1.2, 1.4, 12.2 */
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
+  /* 防止 iOS Safari 弹性滚动 - 需求: 12.2 */
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+}
+
+/* iOS Safari 100dvh 支持 - 需求: 12.1 */
+@supports (min-height: 100dvh) {
+  html, body {
+    min-height: 100dvh;
+  }
 }
 
 body {
@@ -107,12 +165,23 @@ body {
 
 /* App 容器 */
 .app {
+  /* iOS Safari 100vh 问题修复 - 需求: 12.1 */
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   animation: appFadeIn 0.5s ease-out;
-  /* 防止水平溢出 */
+  /* 防止水平溢出 - 需求: 1.2, 1.4 */
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
+  /* 防止弹性滚动 - 需求: 12.2 */
+  overscroll-behavior: none;
+}
+
+/* iOS Safari 100dvh 支持 - 需求: 12.1 */
+@supports (min-height: 100dvh) {
+  .app {
+    min-height: 100dvh;
+  }
 }
 
 @keyframes appFadeIn {
@@ -574,6 +643,27 @@ button:active:not(:disabled) {
   top: 0;
 }
 
+/* ==================== 模态框背景滚动锁定 ==================== */
+/* 需求: 10.2 - 模态框打开时锁定背景滚动 */
+
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  /* 保持滚动位置，防止跳动 */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* iOS Safari 特殊处理 */
+body.modal-open .app {
+  overflow: hidden;
+  height: 100%;
+}
+
 
 /* ==================== 低高度视口适配 ==================== */
 /* 需求: 10.4 - 当视口高度 < 700px 时减少面板内边距 */
@@ -821,3 +911,484 @@ button:active:not(:disabled) {
     }
   }
 }
+
+
+/* ==================== 移动端字体和间距优化 ==================== */
+/* 需求: 9.1, 9.2, 9.3, 9.4 - 移动端字体最小尺寸、紧凑间距和行高 */
+
+/* Property 15: Font Size Minimum
+ * *For any* body text element on mobile, the computed font size should be at least 14px.
+ * **Validates: Requirements 9.1**
+ */
+
+/* Property 16: Compact Spacing on Small Screens
+ * *For any* viewport width below 480px, the gap between elements should be within the compact range (4-8px).
+ * **Validates: Requirements 9.2, 9.3**
+ */
+
+/* Property 17: Line Height Readability
+ * *For any* text element, the computed line-height should be at least 1.4 for readability.
+ * **Validates: Requirements 9.4**
+ */
+
+/* ==================== 全局行高设置 ==================== */
+/* 需求: 9.4 - 确保行高可读性 */
+
+body {
+  line-height: var(--mobile-line-height, 1.4);
+}
+
+/* 所有文本元素的最小行高 */
+p, span, div, li, td, th, label, a {
+  line-height: inherit;
+}
+
+/* 标题行高可以稍紧凑 */
+h1, h2, h3, h4, h5, h6 {
+  line-height: var(--mobile-line-height-tight, 1.3);
+}
+
+/* ==================== iPhone 竖屏字体和间距 (<480px) ==================== */
+/* 需求: 9.1, 9.2, 9.3, 9.4 */
+
+@media (max-width: 479px) {
+  /* 确保 body 文本 >= 14px - 需求: 9.1 */
+  body {
+    font-size: var(--mobile-font-body, 14px);
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 标题字体比例调整 - 需求: 9.1 */
+  h1, .h1 {
+    font-size: var(--mobile-font-h1, 1.5rem);
+    line-height: var(--mobile-line-height-tight, 1.3);
+  }
+  
+  h2, .h2 {
+    font-size: var(--mobile-font-h2, 1.25rem);
+    line-height: var(--mobile-line-height-tight, 1.3);
+  }
+  
+  h3, .h3 {
+    font-size: var(--mobile-font-h3, 1.1rem);
+    line-height: var(--mobile-line-height-tight, 1.3);
+  }
+  
+  h4, h5, h6, .h4, .h5, .h6 {
+    font-size: 1rem;
+    line-height: var(--mobile-line-height-tight, 1.3);
+  }
+  
+  /* 面板标题字体 */
+  .panel-title {
+    font-size: 0.9375rem;
+    line-height: var(--mobile-line-height-tight, 1.3);
+  }
+  
+  /* 正文文本最小字体 - 需求: 9.1 */
+  p, span, div, li, td, th, label {
+    font-size: max(inherit, var(--mobile-font-min, 14px));
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 小字体文本 */
+  small, .small, .text-small {
+    font-size: var(--mobile-font-small, 12px);
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 按钮字体 */
+  button, .btn {
+    font-size: var(--mobile-font-min, 14px);
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 输入框字体 - 防止 iOS 缩放 */
+  input, textarea, select {
+    font-size: 16px;
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* ==================== 紧凑间距 (4-8px) ==================== */
+  /* 需求: 9.2, 9.3 */
+  
+  /* 使用紧凑间距变量 */
+  .app {
+    --current-gap: var(--mobile-gap-sm, 8px);
+    --current-padding: var(--mobile-padding-xs, 8px);
+  }
+  
+  /* 面板内边距紧凑化 */
+  .resource-panel,
+  .metrics-panel,
+  .operations-panel,
+  .team-panel,
+  .save-load-panel,
+  .event-log,
+  .equipment-panel,
+  .dimensions-display {
+    padding: var(--mobile-padding-xs, 8px);
+  }
+  
+  /* 面板内部元素间距 */
+  .resource-panel > *,
+  .metrics-panel > *,
+  .operations-panel > *,
+  .team-panel > *,
+  .save-load-panel > *,
+  .event-log > *,
+  .equipment-panel > * {
+    margin-bottom: var(--mobile-gap-xs, 4px);
+  }
+  
+  .resource-panel > *:last-child,
+  .metrics-panel > *:last-child,
+  .operations-panel > *:last-child,
+  .team-panel > *:last-child,
+  .save-load-panel > *:last-child,
+  .event-log > *:last-child,
+  .equipment-panel > *:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* 列表项间距 */
+  ul, ol {
+    padding-left: 1rem;
+  }
+  
+  li {
+    margin-bottom: var(--mobile-gap-xs, 4px);
+  }
+  
+  /* 表格单元格间距 */
+  td, th {
+    padding: var(--mobile-gap-xs, 4px) var(--mobile-gap-sm, 8px);
+  }
+  
+  /* 卡片间距 */
+  .card, .panel {
+    padding: var(--mobile-padding-xs, 8px);
+  }
+  
+  /* 按钮组间距 */
+  .button-group, .btn-group {
+    gap: var(--mobile-gap-sm, 8px);
+  }
+  
+  /* 表单元素间距 */
+  .form-group {
+    margin-bottom: var(--mobile-gap-sm, 8px);
+  }
+  
+  label {
+    margin-bottom: var(--mobile-gap-xs, 4px);
+  }
+}
+
+/* ==================== 平板端字体和间距 (768-1024px) ==================== */
+/* 需求: 9.2, 9.3 */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* 平板端字体 */
+  body {
+    font-size: 15px;
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 标题字体比例 */
+  h1, .h1 {
+    font-size: 1.75rem;
+    line-height: var(--mobile-line-height-tight, 1.3);
+  }
+  
+  h2, .h2 {
+    font-size: 1.5rem;
+    line-height: var(--mobile-line-height-tight, 1.3);
+  }
+  
+  h3, .h3 {
+    font-size: 1.25rem;
+    line-height: var(--mobile-line-height-tight, 1.3);
+  }
+  
+  /* 面板标题字体 */
+  .panel-title {
+    font-size: 1rem;
+    line-height: var(--mobile-line-height-tight, 1.3);
+  }
+  
+  /* ==================== 中等间距 (8-12px) ==================== */
+  /* 需求: 9.2, 9.3 */
+  
+  .app {
+    --current-gap: var(--mobile-gap-md, 12px);
+    --current-padding: var(--mobile-padding-sm, 12px);
+  }
+  
+  /* 面板内边距 */
+  .resource-panel,
+  .metrics-panel,
+  .operations-panel,
+  .team-panel,
+  .save-load-panel,
+  .event-log,
+  .equipment-panel,
+  .dimensions-display {
+    padding: var(--mobile-padding-sm, 12px);
+  }
+  
+  /* 面板内部元素间距 */
+  .resource-panel > *,
+  .metrics-panel > *,
+  .operations-panel > *,
+  .team-panel > *,
+  .save-load-panel > *,
+  .event-log > *,
+  .equipment-panel > * {
+    margin-bottom: var(--mobile-gap-sm, 8px);
+  }
+  
+  .resource-panel > *:last-child,
+  .metrics-panel > *:last-child,
+  .operations-panel > *:last-child,
+  .team-panel > *:last-child,
+  .save-load-panel > *:last-child,
+  .event-log > *:last-child,
+  .equipment-panel > *:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* 表格单元格间距 */
+  td, th {
+    padding: var(--mobile-gap-sm, 8px) var(--mobile-gap-md, 12px);
+  }
+  
+  /* 卡片间距 */
+  .card, .panel {
+    padding: var(--mobile-padding-sm, 12px);
+  }
+  
+  /* 按钮组间距 */
+  .button-group, .btn-group {
+    gap: var(--mobile-gap-md, 12px);
+  }
+  
+  /* 表单元素间距 */
+  .form-group {
+    margin-bottom: var(--mobile-gap-md, 12px);
+  }
+  
+  label {
+    margin-bottom: var(--mobile-gap-sm, 8px);
+  }
+}
+
+/* ==================== iPhone 横屏字体和间距 (480-767px landscape) ==================== */
+/* 需求: 9.2, 9.3 */
+
+@media (min-width: 480px) and (max-width: 767px) and (orientation: landscape) {
+  /* 横屏字体稍小以节省空间 */
+  body {
+    font-size: var(--mobile-font-min, 14px);
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 标题字体紧凑 */
+  h1, .h1 {
+    font-size: 1.25rem;
+  }
+  
+  h2, .h2 {
+    font-size: 1.1rem;
+  }
+  
+  h3, .h3 {
+    font-size: 1rem;
+  }
+  
+  /* 面板标题 */
+  .panel-title {
+    font-size: 0.875rem;
+  }
+  
+  /* 紧凑间距 */
+  .resource-panel,
+  .metrics-panel,
+  .operations-panel,
+  .team-panel,
+  .save-load-panel,
+  .event-log,
+  .equipment-panel,
+  .dimensions-display {
+    padding: var(--mobile-padding-xs, 8px);
+  }
+}
+
+/* ==================== 确保所有文本元素行高可读 ==================== */
+/* 需求: 9.4 */
+
+/* 强制所有移动端文本元素使用可读行高 */
+@media (max-width: 1023px) {
+  /* 段落和正文 */
+  p {
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 列表项 */
+  li {
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 表格单元格 */
+  td, th {
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 标签和表单元素 */
+  label, input, textarea, select {
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 按钮 */
+  button, .btn {
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 链接 */
+  a {
+    line-height: inherit;
+  }
+  
+  /* 事件日志条目 */
+  .log-entry, .event-item {
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 资源显示 */
+  .resource-value, .metric-value {
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 团队成员信息 */
+  .member-name, .member-info, .member-stats {
+    line-height: var(--mobile-line-height, 1.4);
+  }
+  
+  /* 操作按钮文本 */
+  .operation-name, .operation-cost, .operation-effect {
+    line-height: var(--mobile-line-height, 1.4);
+  }
+}
+
+/* ==================== iOS Safari 平滑滚动优化 ==================== */
+/* 需求: 10.1 - 启用平滑滚动 */
+
+/* 全局平滑滚动设置 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* iOS Safari 平滑滚动 - 需求: 10.1 */
+/* 为所有可滚动元素添加 -webkit-overflow-scrolling: touch */
+
+/* 全局滚动容器 */
+body,
+.app,
+.game-board {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 侧边栏滚动 */
+.game-sidebar,
+.left-sidebar,
+.right-sidebar {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 面板内部滚动 */
+.resource-panel,
+.metrics-panel,
+.operations-panel,
+.team-panel,
+.save-load-panel,
+.event-log,
+.equipment-panel,
+.dimensions-display {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 模态框滚动 */
+.modal-content,
+.modal-body,
+.tutorial-content,
+.exam-content {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 列表和表格滚动 */
+.scrollable,
+.scroll-container,
+[data-scrollable="true"] {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* 通用滚动工具类 */
+.smooth-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* 移动端特定平滑滚动优化 */
+@media (max-width: 1023px) {
+  /* 确保所有可滚动元素在移动端有平滑滚动 */
+  [style*="overflow: auto"],
+  [style*="overflow-y: auto"],
+  [style*="overflow-x: auto"],
+  [style*="overflow: scroll"],
+  [style*="overflow-y: scroll"],
+  [style*="overflow-x: scroll"] {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* 面板内容区域 */
+  .panel-content,
+  .panel-body {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* 事件日志列表 */
+  .log-list,
+  .event-list {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* 团队成员列表 */
+  .team-list,
+  .member-list {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* 操作按钮容器 */
+  .operations-container,
+  .button-container {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 触摸设备特定优化 */
+@media (pointer: coarse) {
+  /* 所有可滚动元素启用平滑滚动 */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* 滚动容器优化 */
+  .game-sidebar,
+  .modal-content,
+  .panel-content {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+

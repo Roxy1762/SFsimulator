@@ -6,7 +6,7 @@
  * 需求: 28.1, 28.2, 28.3, 28.4, 28.5
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import './TutorialModal.css';
 
 interface TutorialModalProps {
@@ -288,6 +288,18 @@ const TUTORIAL_CHAPTERS: TutorialChapter[] = [
  */
 export function TutorialModal({ isOpen, onClose }: TutorialModalProps) {
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
+
+  // 模态框打开时锁定背景滚动 - 需求 10.2
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [isOpen]);
 
   // 切换到指定章节
   const goToChapter = useCallback((index: number) => {

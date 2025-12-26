@@ -460,11 +460,41 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* 响应式设计 */
-@media (max-width: 480px) {
+/* 响应式设计 - 移动端优化 */
+/* Requirements: 8.1, 8.3, 8.4 */
+
+/* 平板和小屏幕 */
+@media (max-width: 767px) {
+  .game-over-modal-overlay {
+    padding: var(--mobile-padding-sm, 12px);
+  }
+  
   .game-over-modal {
+    width: 95%;
+    max-width: 95vw;
+    max-height: calc(100vh - 60px);
+    max-height: calc(100dvh - 60px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 1.5rem;
     border-radius: 16px;
+  }
+  
+  /* 重新开始按钮触摸优化 - 需求 8.4 */
+  .game-over-restart-button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 1rem;
+  }
+}
+
+/* 小屏手机 */
+@media (max-width: 480px) {
+  .game-over-modal {
+    padding: 1.25rem;
+    width: 95%;
+    max-width: 95vw;
+    border-radius: 14px;
   }
 
   .game-over-icon {
@@ -498,5 +528,36 @@
 
   .stat-value {
     font-size: 0.9rem;
+  }
+  
+  /* 评分区域紧凑布局 */
+  .game-over-rating {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  /* 维度进度条紧凑布局 */
+  .dim-label {
+    width: 50px;
+    font-size: 0.75rem;
+  }
+  
+  .dim-value {
+    font-size: 0.75rem;
+  }
+  
+  /* 团队成员标签紧凑布局 */
+  .member-badge {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+  }
+  
+  /* 重新开始按钮 */
+  .game-over-restart-button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.875rem;
+    font-size: 1rem;
   }
 }
