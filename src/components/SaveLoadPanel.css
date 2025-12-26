@@ -369,6 +369,39 @@
   }
 }
 
+/* iPad 平板竖屏优化 (768-1024px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .save-load-panel {
+    padding: 0.75rem;
+  }
+  
+  .save-load-header {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.375rem;
+  }
+  
+  .save-load-panel .panel-title {
+    font-size: 0.8rem;
+  }
+  
+  .save-load-panel .title-icon {
+    font-size: 0.9rem;
+  }
+  
+  .save-load-buttons {
+    gap: 0.375rem;
+  }
+  
+  .save-load-btn {
+    padding: 0.5rem 0.625rem;
+    font-size: 0.75rem;
+  }
+  
+  .save-load-btn .btn-icon {
+    font-size: 0.8rem;
+  }
+}
+
 @media (max-width: 480px) {
   .save-load-panel .panel-title {
     font-size: 0.85rem;

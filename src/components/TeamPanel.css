@@ -291,6 +291,62 @@
   }
 }
 
+/* iPad 平板竖屏优化 (768-1024px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .team-panel {
+    padding: 0.875rem;
+  }
+  
+  .team-panel-header {
+    margin-bottom: 0.625rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .team-panel .panel-title {
+    font-size: 0.9rem;
+  }
+  
+  .team-count {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+  }
+  
+  .salary-overview {
+    padding: 0.625rem;
+    margin-bottom: 0.625rem;
+  }
+  
+  .salary-overview-title {
+    font-size: 0.7rem;
+  }
+  
+  .salary-label {
+    font-size: 0.7rem;
+  }
+  
+  .salary-amount {
+    font-size: 0.8rem;
+  }
+  
+  .section-title {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .team-section {
+    margin-bottom: 0.875rem;
+  }
+  
+  .empty-team {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .team-members-list {
+    gap: 0.5rem;
+  }
+}
+
 @media (max-width: 480px) {
   .team-panel {
     padding: 0.875rem;
